@@ -67,7 +67,9 @@ const SliderBar = () => {
                             <Typography variant='body2' fontWeight='700'>
                                 Favorite
                             </Typography>
-
+                            <IconButton >
+                                <AddBoxOutlinedIcon fontSize='small' />
+                            </IconButton>
                         </Box>
                     </ListItem>
                 </Box>
