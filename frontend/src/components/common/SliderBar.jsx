@@ -7,12 +7,12 @@ import { useEffect, useState } from 'react'
 import assets from '../../assets/index'
 
 import { setBoards } from '../../slices/boardSlice'
-import { useLoginMutation } from '../../slices/usersApiSlice'
+import { useGetAllMutation } from '../../slices/boardsApiSlice'
 
 const SliderBar = () => {
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
-    const [get, { isLoading }] = useLoginMutation();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [getAll, { isLoading }] = useGetAllMutation();
     const { user } = useSelector((state) => state.auth.userInfo);
 
     const sidebarWidth = 250
@@ -24,8 +24,9 @@ const SliderBar = () => {
     useEffect(() => {
         const getBoards = async () => {
             try {
-                // const res = await get();
-                // dispatch(setBoards({ ...res }));
+                const res = await getAll().unwrap();
+                console.log({ res })
+                dispatch(setBoards(res));
             } catch (err) {
                 alert(err)
             }

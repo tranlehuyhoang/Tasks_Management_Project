@@ -30,6 +30,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 body: data,
             }),
         }),
+        getalls: builder.mutation({
+            query: (data) => ({
+                url: `http://localhost:5000/api/boards`,
+                method: 'GET',
+                body: data,
+            }),
+        }),
     }),
 });
 
@@ -38,4 +45,5 @@ export const {
     useLogoutMutation,
     useRegisterMutation,
     useUpdateUserMutation,
+    useGetallMutation,
 } = userApiSlice;
