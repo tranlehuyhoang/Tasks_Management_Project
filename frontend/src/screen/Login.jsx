@@ -1,19 +1,43 @@
 import { Box, Button, TextField } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import LoadingButton from '@mui/lab/LoadingButton'
+import { setCredentials } from '../slices/authSlice'
+import { toast } from 'react-toastify'
+import { useLoginMutation } from '../slices/usersApiSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Login = () => {
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState(false)
-    const [usernameErrText, setUsernameErrText] = useState('')
-    const [passwordErrText, setPasswordErrText] = useState('')
+    const [usernameErrText, setUsernameErrText] = useState('');
+    const [passwordErrText, setPasswordErrText] = useState('');
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const [login, { isLoading }] = useLoginMutation();
+    const { userInfo } = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        if (userInfo) {
+            navigate('/');
+        }
+    }, [navigate, userInfo]);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setUsernameErrText('')
-        setPasswordErrText('')
-    }
+        e.preventDefault();
+        try {
+            const res = await login({ username: usernameErrText, password: passwordErrText }).unwrap();
+            dispatch(setCredentials({ ...res }));
+            navigate('/');
+        } catch (err) {
+            toast.error(err?.data?.message || err.error);
+        }
+    };
+
+
+
     return (
         <>
             <Box
@@ -29,9 +53,11 @@ const Login = () => {
                     id='username'
                     label='Username'
                     name='username'
-                    disabled={loading}
+                    disabled={isLoading}
                     error={usernameErrText !== ''}
                     helperText={usernameErrText}
+                    value={usernameErrText}
+                    onChange={e => setUsernameErrText(e.target.value)}
                 />
                 <TextField
                     margin='normal'
@@ -41,9 +67,11 @@ const Login = () => {
                     label='Password'
                     name='password'
                     type='password'
-                    disabled={loading}
+                    disabled={isLoading}
                     error={passwordErrText !== ''}
                     helperText={passwordErrText}
+                    value={passwordErrText}
+                    onChange={e => setPasswordErrText(e.target.value)}
                 />
                 <LoadingButton
                     sx={{ mt: 3, mb: 2 }}
@@ -51,7 +79,7 @@ const Login = () => {
                     fullWidth
                     color='success'
                     type='submit'
-                    loading={loading}
+                    loading={isLoading}
                 >
                     Login
                 </LoadingButton>

@@ -1,5 +1,5 @@
 import { Box, Button, TextField } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useRegisterMutation } from '../slices/usersApiSlice';
@@ -7,34 +7,38 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCredentials } from '../slices/authSlice';
 import { toast } from 'react-toastify';
 const Register = () => {
-    const navigate = useNavigate()
-    const dispatch = useDispatch();
 
 
     const [usernameErrText, setUsernameErrText] = useState('')
     const [passwordErrText, setPasswordErrText] = useState('')
     const [confirmPasswordErrText, setConfirmPasswordErrText] = useState('')
-    const [register, { isLoading }] = useRegisterMutation();
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [register, { isLoading }] = useRegisterMutation();
+    const { userInfo } = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        if (userInfo) {
+            navigate('/');
+        }
+    }, [navigate, userInfo]);
 
     const handleSubmit = async (e) => {
-        console.log({
-            usernameErrText,
-            passwordErrText,
-            confirmPasswordErrText,
-        })
+        e.preventDefault()
+
         if (passwordErrText !== confirmPasswordErrText) {
             toast.error('Passwords do not match');
         } else {
             try {
                 const res = await register({ username: usernameErrText, password: passwordErrText }).unwrap();
+
                 dispatch(setCredentials({ ...res }));
-                navigate('/');
+                navigate('/login');
             } catch (err) {
                 toast.error(err?.data?.message || err.error);
             }
         }
-        e.preventDefault()
         setUsernameErrText('')
         setPasswordErrText('')
         setConfirmPasswordErrText('')
