@@ -11,7 +11,7 @@ const createBoard = asyncHandler(async (req, res) => {
     try {
         const boardsCount = await Board.find().count()
         const board = await Board.create({
-            user: req.user.user._id,
+            user: req.user._id,
             position: boardsCount > 0 ? boardsCount : 0
         })
         res.status(201).json(board)
@@ -23,7 +23,7 @@ const createBoard = asyncHandler(async (req, res) => {
 })
 const getAll = asyncHandler(async (req, res) => {
     try {
-        const boards = await Board.find({ user: req.user.user._id }).sort('-position')
+        const boards = await Board.find({ user: req.user._id }).sort('-position')
         res.status(200).json(boards)
     } catch (err) {
         res.status(500).json(err)
@@ -33,7 +33,7 @@ const getAll = asyncHandler(async (req, res) => {
 const getOne = asyncHandler(async (req, res) => {
     const { boardId } = req.params
     try {
-        const board = await Board.findOne({ user: req.user.user._id, _id: boardId })
+        const board = await Board.findOne({ user: req.user._id, _id: boardId })
         if (!board) return res.status(404).json('Board not found')
         const sections = await Section.find({ board: boardId })
         for (const section of sections) {
@@ -106,7 +106,7 @@ const update = asyncHandler(async (req, res) => {
 const getFavourites = asyncHandler(async (req, res) => {
     try {
         const favourites = await Board.find({
-            user: req.user.user._id,
+            user: req.user._id,
             favourite: true
         }).sort('-favouritePosition')
         res.status(200).json(favourites)

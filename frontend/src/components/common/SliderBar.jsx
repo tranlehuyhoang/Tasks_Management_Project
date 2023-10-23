@@ -3,16 +3,16 @@ import { Box, Drawer, IconButton, List, ListItem, ListItemButton, Typography } f
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import assets from '../../assets/index'
+
+import { setBoards } from '../../slices/boardSlice'
+import { useLoginMutation } from '../../slices/usersApiSlice'
 
 const SliderBar = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { boardId } = useParams()
-
-    const [activeIndex, setActiveIndex] = useState(0)
-
+    const [get, { isLoading }] = useLoginMutation();
     const { user } = useSelector((state) => state.auth.userInfo);
 
     const sidebarWidth = 250
@@ -21,6 +21,17 @@ const SliderBar = () => {
         localStorage.removeItem('userInfo')
         navigate('/login')
     }
+    useEffect(() => {
+        const getBoards = async () => {
+            try {
+                // const res = await get();
+                // dispatch(setBoards({ ...res }));
+            } catch (err) {
+                alert(err)
+            }
+        }
+        getBoards()
+    }, [dispatch])
 
     return (
         <Drawer

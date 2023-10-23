@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.get('/', (req, res) => res.send('Server ready'))
 app.use('/api/users', userRouter);
-app.use('/boards', boardRoute);
+app.use('/api/boards', boardRoute);
 
 
 app.use(notFound);
