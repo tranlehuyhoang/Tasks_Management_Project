@@ -1,19 +1,24 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { Box, Drawer, IconButton, List, ListItem, ListItemButton, Typography } from '@mui/material'
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
-import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import assets from '../../assets/index'
-
-import { setBoards } from '../../slices/boardSlice'
-import { useGetAllMutation } from '../../slices/boardsApiSlice'
+import { useSelector, useDispatch } from 'react-redux';
+import { Box, Drawer, IconButton, List, ListItem, ListItemButton, Typography } from '@mui/material';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import assets from '../../assets/index';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { setBoards } from '../../slices/boardSlice';
+import { useGetAllMutation, useUpdatePositionMutation } from '../../slices/boardsApiSlice';
 
 const SliderBar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { boardId } = useParams()
+    const [activeIndex, setActiveIndex] = useState(0)
+
     const [getAll, { isLoading }] = useGetAllMutation();
+    const [updatePosition] = useUpdatePositionMutation();
     const { user } = useSelector((state) => state.auth.userInfo);
+    const boardvalues = useSelector((state) => state.board.value);
 
     const sidebarWidth = 250
 
@@ -28,12 +33,32 @@ const SliderBar = () => {
                 console.log({ res })
                 dispatch(setBoards(res));
             } catch (err) {
-                alert(err)
+                console.log(err)
             }
         }
         getBoards()
     }, [dispatch])
 
+    const onDragEnd = async ({ source, destination }) => {
+        if (!destination) {
+            return;
+        }
+
+        const newList = [...boardvalues];
+        const [removed] = newList.splice(source.index, 1);
+        newList.splice(destination.index, 0, removed);
+
+        const activeItem = newList.findIndex((e) => e.id === boardId);
+        setActiveIndex(activeItem);
+        dispatch(setBoards(newList));
+
+        try {
+            // await useUpdatePositionMutation({ boards: newList })
+            const res = await updatePosition({ boards: newList }).unwrap();
+        } catch (err) {
+            console.log(err);
+        }
+    };
     return (
         <Drawer
             container={window.document.body}
@@ -102,6 +127,43 @@ const SliderBar = () => {
                         </IconButton>
                     </Box>
                 </ListItem>
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable key={'list-board-droppable-key'} droppableId={'list-board-droppable'}>
+                        {(provided) => (
+                            <div ref={provided.innerRef} {...provided.droppableProps}>
+                                {
+                                    boardvalues.map((item, index) => (
+                                        <Draggable key={item.id} draggableId={item.id} index={index}>
+                                            {(provided, snapshot) => (
+                                                <ListItemButton
+                                                    ref={provided.innerRef}
+                                                    {...provided.dragHandleProps}
+                                                    {...provided.draggableProps}
+                                                    selected={index === activeIndex}
+                                                    component={Link}
+                                                    to={`/boards/${item.id}`}
+                                                    sx={{
+                                                        pl: '20px',
+                                                        cursor: snapshot.isDragging ? 'grab' : 'pointer!important'
+                                                    }}
+                                                >
+                                                    <Typography
+                                                        variant='body2'
+                                                        fontWeight='700'
+                                                        sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                                                    >
+                                                        {item.icon} {item.title}
+                                                    </Typography>
+                                                </ListItemButton>
+                                            )}
+                                        </Draggable>
+                                    ))
+                                }
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>
             </List>
         </Drawer>
     )

@@ -64,7 +64,7 @@ export const boardApiSlice = apiSlice.injectEndpoints({
 export const {
     useCreateBoardMutation,
     useGetAllMutation,
-    useupdatePositionMutation,
+    useUpdatePositionMutation,
     usegetFavouritesMutation,
     useupdateFavouritePositionMutation,
     usegetOneMutation,
