@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import assets from '../../assets/index';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { setBoards } from '../../slices/boardSlice';
-import { useGetAllMutation, useUpdatePositionMutation } from '../../slices/boardsApiSlice';
+import { useCreateBoardMutation, useGetAllMutation, useUpdatePositionMutation } from '../../slices/boardsApiSlice';
 
 const SliderBar = () => {
     const navigate = useNavigate();
@@ -17,6 +17,7 @@ const SliderBar = () => {
 
     const [getAll, { isLoading }] = useGetAllMutation();
     const [updatePosition] = useUpdatePositionMutation();
+    const [createBoard] = useCreateBoardMutation();
     const { user } = useSelector((state) => state.auth.userInfo);
     const boardvalues = useSelector((state) => state.board.value);
 
@@ -39,6 +40,14 @@ const SliderBar = () => {
         getBoards()
     }, [dispatch])
 
+    useEffect(() => {
+        const activeItem = boardvalues.findIndex(e => e.id === boardId)
+        if (boardvalues.length > 0 && boardId === undefined) {
+            navigate(`/boards/${boardvalues[0].id}`)
+        }
+        setActiveIndex(activeItem)
+    }, [boardvalues, boardId, navigate])
+
     const onDragEnd = async ({ source, destination }) => {
         if (!destination) {
             return;
@@ -59,6 +68,18 @@ const SliderBar = () => {
             console.log(err);
         }
     };
+
+    const addBoard = async () => {
+        try {
+            const res = await createBoard().unwrap();
+            const newList = [res, ...boardvalues]
+            dispatch(setBoards(newList))
+            navigate(`/boards/${res.id}`)
+        } catch (err) {
+            alert(err)
+        }
+    }
+
     return (
         <Drawer
             container={window.document.body}
@@ -122,7 +143,7 @@ const SliderBar = () => {
                         <Typography variant='body2' fontWeight='700'>
                             Private
                         </Typography>
-                        <IconButton >
+                        <IconButton onClick={addBoard}>
                             <AddBoxOutlinedIcon fontSize='small' />
                         </IconButton>
                     </Box>

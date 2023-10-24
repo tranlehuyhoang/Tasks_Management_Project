@@ -38,10 +38,10 @@ export const boardApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         getOne: builder.mutation({
-            query: (data) => ({
+            query: () => ({
                 url: `${BOARDS_URL}/:boardId`,
                 method: 'GET',
-                body: data,
+
             }),
         }),
         update: builder.mutation({
@@ -67,7 +67,7 @@ export const {
     useUpdatePositionMutation,
     usegetFavouritesMutation,
     useupdateFavouritePositionMutation,
-    usegetOneMutation,
+    useGetOneMutation,
     useupdateMutation,
     usedeleteBoardMutation,
 
