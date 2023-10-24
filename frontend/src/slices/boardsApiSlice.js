@@ -1,3 +1,4 @@
+import { useParams } from 'react-router';
 import { apiSlice } from './apiSlice.js';
 const BOARDS_URL = '/api/boards';
 
@@ -46,14 +47,15 @@ export const boardApiSlice = apiSlice.injectEndpoints({
         }),
         update: builder.mutation({
             query: (data) => ({
-                url: `${BOARDS_URL}/:boardId`,
+
+                url: `${BOARDS_URL}/${data.boardId}`,
                 method: 'PUT',
                 body: data,
             }),
         }),
         deleteBoard: builder.mutation({
             query: (data) => ({
-                url: `${BOARDS_URL}/:boardId`,
+                url: `${BOARDS_URL}/${data}`,
                 method: 'DELETE',
                 body: data,
             }),
@@ -68,7 +70,7 @@ export const {
     usegetFavouritesMutation,
     useupdateFavouritePositionMutation,
     useGetOneMutation,
-    useupdateMutation,
+    useUpdateMutation,
     usedeleteBoardMutation,
 
 } = boardApiSlice;
