@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetOneMutation } from '../slices/boardsApiSlice'
+import EmojiPicker from '../components/common/EmojiPicker'
 
 const Board = () => {
 
@@ -24,6 +25,7 @@ const Board = () => {
 
     useEffect(() => {
         const getBoard = async () => {
+            console.log(boardId)
             try {
                 const res = await getOne(boardId).unwrap();
                 console.log(res);
@@ -37,8 +39,29 @@ const Board = () => {
             }
         }
         getBoard()
+
     }, [boardId])
 
+    const onIconChange = async (newIcon) => {
+        // let temp = [...boards]
+        // const index = temp.findIndex(e => e.id === boardId)
+        // temp[index] = { ...temp[index], icon: newIcon }
+
+        // if (isFavourite) {
+        //   let tempFavourite = [...favouriteList]
+        //   const favouriteIndex = tempFavourite.findIndex(e => e.id === boardId)
+        //   tempFavourite[favouriteIndex] = { ...tempFavourite[favouriteIndex], icon: newIcon }
+        //   dispatch(setFavouriteList(tempFavourite))
+        // }
+
+        // setIcon(newIcon)
+        // dispatch(setBoards(temp))
+        // try {
+        //   await boardApi.update(boardId, { icon: newIcon })
+        // } catch (err) {
+        //   alert(err)
+        // }
+    }
     return (
         <>
             <Box sx={{
@@ -63,6 +86,9 @@ const Board = () => {
             <Box sx={{ padding: '10px 50px' }}>
                 <Box>
                     {/* emoji picker */}
+
+                    {/* <EmojiPicker icon={icon} />*/}
+                    <EmojiPicker icon={icon} onChange={onIconChange} />
                     <TextField
                         value={title}
 
