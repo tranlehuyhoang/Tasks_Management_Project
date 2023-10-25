@@ -18,7 +18,7 @@ export const sectionApiSlice = apiSlice.injectEndpoints({
         }),
         deleteSection: builder.mutation({
             query: (data) => ({
-                url: `${SECTIONS_URL}/${data}`,
+                url: `${SECTIONS_URL}/${data.sectionId}`,
                 method: 'DELETE',
                 body: data,
             }),
