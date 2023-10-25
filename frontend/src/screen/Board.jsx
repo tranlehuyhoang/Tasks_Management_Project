@@ -5,11 +5,12 @@ import { Box, IconButton, TextField } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useGetOneMutation, useUpdateMutation } from '../slices/boardsApiSlice'
+import { useGetOneMutation, useUpdateMutation, useDeleteBoardMutation } from '../slices/boardsApiSlice'
 import EmojiPicker from '../components/common/EmojiPicker'
 import { setBoards } from '../slices/boardSlice'
 import { setFavoriteList } from '../slices/boardFavoriteSlice'
-
+import Loading from '../components/common/Loading'
+import Kanban from '../components/common/Kanban'
 let timer
 const timeout = 500
 const Board = () => {
@@ -26,7 +27,8 @@ const Board = () => {
     const boards = useSelector((state) => state.board.value)
     const { userInfo } = useSelector((state) => state.auth);
     const favouriteList = useSelector((state) => state.favorite.value)
-    const [getOne, { isLoading }] = useGetOneMutation();
+    const [getOne, { isLoading: getOneIsLoading }] = useGetOneMutation();
+    const [deleteBoard, { isLoading: deleteBoardIsLoading }] = useDeleteBoardMutation();
     const [update] = useUpdateMutation();
 
 
@@ -43,6 +45,7 @@ const Board = () => {
                 setIsFavourite(res.favourite)
                 setIcon(res.icon)
             } catch (err) {
+                navigate('/boards')
                 console.log(err)
             }
         }
@@ -133,65 +136,88 @@ const Board = () => {
             console.log(err)
         }
     }
+
+    const deleteBoards = async () => {
+        try {
+            await deleteBoard(boardId).unwrap();
+            if (isFavourite) {
+                const newFavouriteList = favouriteList.filter(e => e.id !== boardId)
+                dispatch(setFavoriteList(newFavouriteList))
+            }
+
+            const newList = boards.filter(e => e.id !== boardId)
+            if (newList.length === 0) {
+                navigate('/boards')
+            } else {
+                navigate(`/boards/${newList[0].id}`)
+            }
+            dispatch(setBoards(newList))
+        } catch (err) {
+            console.log(err)
+        }
+    }
     return (
-        <>
-            <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                width: '100%'
-            }}>
-                <IconButton variant='outlined' onClick={addFavourite}>
-                    {
-                        isFavourite ? (
-                            <StarOutlinedIcon color='warning' />
-                        ) : (
-                            <StarBorderOutlinedIcon />
-                        )
-                    }
-                </IconButton>
-                <IconButton variant='outlined' color='error'  >
-                    <DeleteOutlinedIcon />
-                </IconButton>
-            </Box>
-            <Box sx={{ padding: '10px 50px' }}>
-                <Box>
-                    {/* emoji picker */}
 
-                    {/* <EmojiPicker icon={icon} />*/}
-                    <EmojiPicker icon={icon} onChange={onIconChange} />
-                    <TextField
-                        value={title}
-                        onChange={updateTitle}
-                        placeholder='Untitled'
-                        variant='outlined'
-                        fullWidth
-                        sx={{
-                            '& .MuiOutlinedInput-input': { padding: 0 },
-                            '& .MuiOutlinedInput-notchedOutline': { border: 'unset ' },
-                            '& .MuiOutlinedInput-root': { fontSize: '2rem', fontWeight: '700' }
-                        }}
-                    />
-                    <TextField
-                        value={description}
-                        onChange={updateDescription}
-                        placeholder='Add a description'
-                        variant='outlined'
-                        multiline
-                        fullWidth
-                        sx={{
-                            '& .MuiOutlinedInput-input': { padding: 0 },
-                            '& .MuiOutlinedInput-notchedOutline': { border: 'unset ' },
-                            '& .MuiOutlinedInput-root': { fontSize: '0.8rem' }
-                        }}
-                    />
+        getOneIsLoading || deleteBoardIsLoading ? (
+            <Loading />
+        ) : (
+            <>
+                <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%'
+                }}>
+                    <IconButton variant='outlined' onClick={addFavourite}>
+                        {
+                            isFavourite ? (
+                                <StarOutlinedIcon color='warning' />
+                            ) : (
+                                <StarBorderOutlinedIcon />
+                            )
+                        }
+                    </IconButton>
+                    <IconButton variant='outlined' color='error' onClick={deleteBoards}>
+                        <DeleteOutlinedIcon />
+                    </IconButton>
                 </Box>
-                <Box>
-                    {/* Kanban board */}
+                <Box sx={{ padding: '10px 50px' }}>
+                    <Box>
+                        {/* emoji picker */}
+                        <EmojiPicker icon={icon} onChange={onIconChange} />
+                        <TextField
+                            value={title}
+                            onChange={updateTitle}
+                            placeholder='Untitled'
+                            variant='outlined'
+                            fullWidth
+                            sx={{
+                                '& .MuiOutlinedInput-input': { padding: 0 },
+                                '& .MuiOutlinedInput-notchedOutline': { border: 'unset ' },
+                                '& .MuiOutlinedInput-root': { fontSize: '2rem', fontWeight: '700' }
+                            }}
+                        />
+                        <TextField
+                            value={description}
+                            onChange={updateDescription}
+                            placeholder='Add a description'
+                            variant='outlined'
+                            multiline
+                            fullWidth
+                            sx={{
+                                '& .MuiOutlinedInput-input': { padding: 0 },
+                                '& .MuiOutlinedInput-notchedOutline': { border: 'unset ' },
+                                '& .MuiOutlinedInput-root': { fontSize: '0.8rem' }
+                            }}
+                        />
+                    </Box>
+                    <Box>
+                        <Kanban boardId={boardId} data={sections} />
+                    </Box>
+                </Box>
+            </>
+        )
 
-                </Box>
-            </Box>
-        </>
     )
 }
 

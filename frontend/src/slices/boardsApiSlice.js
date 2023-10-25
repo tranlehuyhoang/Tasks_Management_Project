@@ -71,6 +71,6 @@ export const {
     useUpdateFavouritePositionMutation,
     useGetOneMutation,
     useUpdateMutation,
-    usedeleteBoardMutation,
+    useDeleteBoardMutation,
 
 } = boardApiSlice;

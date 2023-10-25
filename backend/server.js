@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import userRouter from './routes/userRoute.js';
 import boardRoute from './routes/boardRoute.js';
+import sectionRoute from './routes/sectionRoute.js';
 
 import cookieParser from 'cookie-parser';
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.get('/', (req, res) => res.send('Server ready'))
 app.use('/api/users', userRouter);
 app.use('/api/boards', boardRoute);
+app.use('/api/sections', sectionRoute);
 
 
 app.use(notFound);

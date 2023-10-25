@@ -1,8 +1,8 @@
 import asyncHandler from 'express-async-handler';
 
-import Board from '../models/boardModel';
-import Section from '../models/sectionModel';
-import Task from '../models/taskModel';
+import Board from '../models/boardModel.js';
+import Section from '../models/sectionModel.js';
+import Task from '../models/taskModel.js';
 import User from '../models/userModel.js';
 
 
