@@ -8,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useGetOneMutation, useUpdateMutation } from '../slices/boardsApiSlice'
 import EmojiPicker from '../components/common/EmojiPicker'
 import { setBoards } from '../slices/boardSlice'
+import { setFavoriteList } from '../slices/boardFavoriteSlice'
 
 let timer
 const timeout = 500
@@ -24,7 +25,7 @@ const Board = () => {
 
     const boards = useSelector((state) => state.board.value)
     const { userInfo } = useSelector((state) => state.auth);
-
+    const favouriteList = useSelector((state) => state.favorite.value)
     const [getOne, { isLoading }] = useGetOneMutation();
     const [update] = useUpdateMutation();
 
@@ -35,7 +36,7 @@ const Board = () => {
             console.log(boardId)
             try {
                 const res = await getOne(boardId).unwrap();
-                console.log(res);
+
                 setTitle(res.title)
                 setDescription(res.description)
                 setSections(res.sections)
@@ -50,16 +51,17 @@ const Board = () => {
     }, [boardId])
 
     const onIconChange = async (newIcon) => {
+
         let temp = [...boards]
         const index = temp.findIndex(e => e.id === boardId)
         temp[index] = { ...temp[index], icon: newIcon }
 
-        // if (isFavourite) {
-        //     let tempFavourite = [...favouriteList]
-        //     const favouriteIndex = tempFavourite.findIndex(e => e.id === boardId)
-        //     tempFavourite[favouriteIndex] = { ...tempFavourite[favouriteIndex], icon: newIcon }
-        //     dispatch(setFavouriteList(tempFavourite))
-        // }
+        if (isFavourite) {
+            let tempFavourite = [...favouriteList]
+            const favouriteIndex = tempFavourite.findIndex(e => e.id === boardId)
+            tempFavourite[favouriteIndex] = { ...tempFavourite[favouriteIndex], icon: newIcon }
+            dispatch(setFavoriteList(tempFavourite))
+        }
 
         setIcon(newIcon)
         dispatch(setBoards(temp))
@@ -82,12 +84,12 @@ const Board = () => {
         const index = temp.findIndex(e => e.id === boardId)
         temp[index] = { ...temp[index], title: newTitle }
 
-        // if (isFavourite) {
-        //   let tempFavourite = [...favouriteList]
-        //   const favouriteIndex = tempFavourite.findIndex(e => e.id === boardId)
-        //   tempFavourite[favouriteIndex] = { ...tempFavourite[favouriteIndex], title: newTitle }
-        //   dispatch(setFavouriteList(tempFavourite))
-        // }
+        if (isFavourite) {
+            let tempFavourite = [...favouriteList]
+            const favouriteIndex = tempFavourite.findIndex(e => e.id === boardId)
+            tempFavourite[favouriteIndex] = { ...tempFavourite[favouriteIndex], title: newTitle }
+            dispatch(setFavoriteList(tempFavourite))
+        }
 
         dispatch(setBoards(temp))
 
@@ -115,6 +117,22 @@ const Board = () => {
             }
         }, timeout);
     }
+
+    const addFavourite = async () => {
+        try {
+            const board = await update({ boardId: boardId, favourite: !isFavourite }).unwrap()
+            let newFavouriteList = [...favouriteList]
+            if (isFavourite) {
+                newFavouriteList = newFavouriteList.filter(e => e.id !== boardId)
+            } else {
+                newFavouriteList.unshift(board)
+            }
+            dispatch(setFavoriteList(newFavouriteList))
+            setIsFavourite(!isFavourite)
+        } catch (err) {
+            console.log(err)
+        }
+    }
     return (
         <>
             <Box sx={{
@@ -123,7 +141,7 @@ const Board = () => {
                 justifyContent: 'space-between',
                 width: '100%'
             }}>
-                <IconButton variant='outlined'  >
+                <IconButton variant='outlined' onClick={addFavourite}>
                     {
                         isFavourite ? (
                             <StarOutlinedIcon color='warning' />

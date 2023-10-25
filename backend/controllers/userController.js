@@ -43,7 +43,8 @@ const authUser = asyncHandler(async (req, res) => {
         const token = generateToken(res, user._id);
 
         res.json({
-            user, token
+            _id: user._id,
+            name: user.username
         });
     } else {
         res.status(401);

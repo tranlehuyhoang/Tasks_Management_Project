@@ -14,13 +14,13 @@ const Home = () => {
 
     const [createBoard, { isLoading }] = useCreateBoardMutation();
 
-    // navigate('/login');
+
     const createBoards = async () => {
         setLoading(true)
         try {
             const res = await createBoard().unwrap();
             dispatch(setBoards([res]))
-            // navigate(`/boards/${res.id}`)
+            navigate(`/boards/${res.id}`)
         } catch (err) {
             alert(err)
         } finally {

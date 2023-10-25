@@ -9,6 +9,7 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { setBoards } from '../../slices/boardSlice';
 import { useCreateBoardMutation, useGetAllMutation, useUpdatePositionMutation } from '../../slices/boardsApiSlice';
 import { logout } from '../../slices/authSlice';
+import FavouriteList from './FavouriteList';
 const SliderBar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -18,11 +19,9 @@ const SliderBar = () => {
     const [getAll, { isLoading }] = useGetAllMutation();
     const [updatePosition] = useUpdatePositionMutation();
     const [createBoard] = useCreateBoardMutation();
-    const user = useSelector((state) => state.auth);
+    const { userInfo } = useSelector((state) => state.auth);
 
-    useEffect(() => {
-        console.log(user.userInfo.user.username)
-    }, [])
+
 
     const boardvalues = useSelector((state) => state.board.value);
 
@@ -35,7 +34,9 @@ const SliderBar = () => {
         navigate('/login')
     }
     useEffect(() => {
-
+        if (!userInfo) {
+            navigate('/login')
+        }
 
         const getBoards = async () => {
             try {
@@ -47,7 +48,7 @@ const SliderBar = () => {
             }
         }
         getBoards()
-    }, [user])
+    }, [userInfo])
 
     useEffect(() => {
         const activeItem = boardvalues.findIndex(e => e.id === boardId)
@@ -116,9 +117,9 @@ const SliderBar = () => {
                         justifyContent: 'space-between'
                     }}>
 
-                        {user != null ? (
+                        {userInfo != null ? (
                             <Typography variant="body2" fontWeight={700}>
-                                {user.userInfo.user.username}
+                                {userInfo.name}
                             </Typography>
                         ) : (
                             <Typography variant="body2" fontWeight={700}>
@@ -148,8 +149,8 @@ const SliderBar = () => {
                         </Box>
                     </ListItem>
                 </Box>
-
                 <Box sx={{ paddingTop: '10px' }} />
+                <FavouriteList />
                 <ListItem>
                     <Box sx={{
                         width: '100%',

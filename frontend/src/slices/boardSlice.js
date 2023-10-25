@@ -9,7 +9,6 @@ const boardSlice = createSlice({
         setBoards: (state, action) => {
             state.value = action.payload
         },
-
     },
 });
 
