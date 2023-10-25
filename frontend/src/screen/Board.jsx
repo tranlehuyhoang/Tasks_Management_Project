@@ -23,6 +23,8 @@ const Board = () => {
     const [icon, setIcon] = useState('')
 
     const boards = useSelector((state) => state.board.value)
+    const { userInfo } = useSelector((state) => state.auth);
+
     const [getOne, { isLoading }] = useGetOneMutation();
     const [update] = useUpdateMutation();
 

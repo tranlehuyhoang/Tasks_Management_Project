@@ -2,7 +2,7 @@ import { Box, Button, TextField } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { setCredentials } from '../slices/authSlice'
+import { logout, setCredentials } from '../slices/authSlice'
 import { toast } from 'react-toastify'
 import { useLoginMutation } from '../slices/usersApiSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,7 +19,10 @@ const Login = () => {
 
     useEffect(() => {
         if (userInfo) {
+            console.log('userInfo true')
             navigate('/');
+        } else {
+            console.log('userInfo false')
         }
     }, [navigate, userInfo]);
 

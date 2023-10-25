@@ -8,7 +8,7 @@ import assets from '../../assets/index';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { setBoards } from '../../slices/boardSlice';
 import { useCreateBoardMutation, useGetAllMutation, useUpdatePositionMutation } from '../../slices/boardsApiSlice';
-
+import { logout } from '../../slices/authSlice';
 const SliderBar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -18,27 +18,36 @@ const SliderBar = () => {
     const [getAll, { isLoading }] = useGetAllMutation();
     const [updatePosition] = useUpdatePositionMutation();
     const [createBoard] = useCreateBoardMutation();
-    const { user } = useSelector((state) => state.auth.userInfo);
+    const user = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        console.log(user.userInfo.user.username)
+    }, [])
+
     const boardvalues = useSelector((state) => state.board.value);
 
     const sidebarWidth = 250
+    // navigate('/login');
 
-    const logout = () => {
+    const logouts = () => {
         localStorage.removeItem('userInfo')
+        dispatch(logout());
         navigate('/login')
     }
     useEffect(() => {
+
+
         const getBoards = async () => {
             try {
                 const res = await getAll().unwrap();
-                console.log({ res })
+
                 dispatch(setBoards(res));
             } catch (err) {
                 console.log(err)
             }
         }
         getBoards()
-    }, [dispatch])
+    }, [user])
 
     useEffect(() => {
         const activeItem = boardvalues.findIndex(e => e.id === boardId)
@@ -106,10 +115,18 @@ const SliderBar = () => {
                         alignItems: 'center',
                         justifyContent: 'space-between'
                     }}>
-                        <Typography variant='body2' fontWeight='700'>
-                            {user.username}
-                        </Typography>
-                        <IconButton onClick={logout}>
+
+                        {user != null ? (
+                            <Typography variant="body2" fontWeight={700}>
+                                {user.userInfo.user.username}
+                            </Typography>
+                        ) : (
+                            <Typography variant="body2" fontWeight={700}>
+                                {/* Placeholder content */}
+                            </Typography>
+                        )}
+
+                        <IconButton onClick={logouts}>
                             <LogoutOutlinedIcon fontSize='small' />
                         </IconButton>
                     </Box>
