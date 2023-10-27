@@ -36,7 +36,7 @@ const updateTask = async (req, res) => {
 }
 
 const deleteTask = async (req, res) => {
-    const { taskId } = req.params
+    const { taskId } = req.body
     try {
         const currentTask = await Task.findById(taskId)
         await Task.deleteOne({ _id: taskId })

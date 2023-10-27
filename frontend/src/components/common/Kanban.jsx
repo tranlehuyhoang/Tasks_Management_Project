@@ -38,6 +38,26 @@ const Kanban = (props) => {
 
         if (destination.droppableId == 'delete') {
             console.log('delete', source.droppableId)
+            try {
+                const sourceColIndex = data.findIndex(e => e.id === source.droppableId)
+                console.log(data[sourceColIndex].tasks)
+
+                setData(prevData => {
+                    const newData = [...prevData]; // Create a shallow copy of the original data array
+                    // console.log(newData[sourceColIndex].tasks);
+
+                    const updatedTasks = newData[sourceColIndex].tasks.filter((task, index) => index !== source.index);
+                    const updatedData = { ...newData[sourceColIndex], tasks: updatedTasks };
+                    newData[sourceColIndex] = updatedData;
+
+                    return newData; // Return the updated data array to set the state
+                });
+                await deleteTask({ taskId: data[sourceColIndex].tasks[source.index].id }).unwrap();
+
+
+            } catch (err) {
+                toast.error(err?.data?.message || err.error);
+            }
             return
         }
         const sourceColIndex = data.findIndex(e => e.id === source.droppableId)
@@ -173,7 +193,7 @@ const Kanban = (props) => {
                             </Box>
                         )}
                     </Droppable>
-                    <Droppable key={'delete-key'} droppableId={'update'}>
+                    <Droppable key={'update-key'} droppableId={'update'}>
                         {(provided) => (
                             <Box
                                 bgcolor={'rgb(102, 187, 106)'}
