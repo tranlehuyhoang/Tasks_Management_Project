@@ -18,7 +18,7 @@ const createTask = async (req, res) => {
         task._doc.section = section
         res.status(201).json(task)
     } catch (err) {
-        res.status(500).json(err)
+        throw new Error(err)
     }
 }
 
@@ -31,7 +31,7 @@ const updateTask = async (req, res) => {
         )
         res.status(200).json(task)
     } catch (err) {
-        res.status(500).json(err)
+        throw new Error(err)
     }
 }
 
@@ -49,7 +49,7 @@ const deleteTask = async (req, res) => {
         }
         res.status(200).json('deleted')
     } catch (err) {
-        res.status(500).json(err)
+        throw new Error(err)
     }
 }
 
@@ -89,7 +89,7 @@ const updatePosition = async (req, res) => {
         }
         res.status(200).json('updated')
     } catch (err) {
-        res.status(500).json(err)
+        throw new Error(err)
     }
 }
 export {

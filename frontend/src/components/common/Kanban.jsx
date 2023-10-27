@@ -5,7 +5,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { useCreateSectionMutation, useDeleteSectionMutation, useUpdateSectionMutation } from '../../slices/sectionsApiSlice'
 import { toast } from 'react-toastify'
-import { useCreateTaskMutation } from '../../slices/tasksApiSlice'
+import { useCreateTaskMutation, useUpdatePositionTaskMutation } from '../../slices/tasksApiSlice'
 let timer
 const timeout = 500
 
@@ -16,6 +16,7 @@ const Kanban = (props) => {
     const [createSection, { isLoading }] = useCreateSectionMutation();
     const [deleteSection] = useDeleteSectionMutation();
     const [updateSection] = useUpdateSectionMutation();
+    const [updatePositionTask] = useUpdatePositionTaskMutation();
     const [createTask] = useCreateTaskMutation();
 
     useEffect(() => {
@@ -46,25 +47,36 @@ const Kanban = (props) => {
         const sourceTasks = [...sourceCol.tasks]
         const destinationTasks = [...destinationCol.tasks]
 
+
         if (source.droppableId !== destination.droppableId) {
             const [removed] = sourceTasks.splice(source.index, 1)
             destinationTasks.splice(destination.index, 0, removed)
-            data[sourceColIndex].tasks = sourceTasks
-            data[destinationColIndex].tasks = destinationTasks
+            setData(prevData => {
+                const newData = [...prevData]; // Create a shallow copy of the original data array
+                newData[sourceColIndex] = { ...newData[sourceColIndex], tasks: sourceTasks }; // Update the source column tasks
+                newData[destinationColIndex] = { ...newData[destinationColIndex], tasks: destinationTasks }; // Update the destination column tasks
+                return newData; // Return the updated data array to set the state
+            });
         } else {
             const [removed] = destinationTasks.splice(source.index, 1)
             destinationTasks.splice(destination.index, 0, removed)
-            data[destinationColIndex].tasks = destinationTasks
+
+            setData(prevData => {
+                const newData = [...prevData]; // Create a shallow copy of the original data array
+                newData[destinationColIndex] = { ...newData[destinationColIndex], tasks: destinationTasks }; // Update the destination column tasks
+                return newData; // Return the updated data array to set the state
+            });
         }
 
         try {
-            await updateSection(boardId, {
+            await updatePositionTask({
                 resourceList: sourceTasks,
                 destinationList: destinationTasks,
                 resourceSectionId: sourceSectionId,
                 destinationSectionId: destinationSectionId
-            }).unwrap();
-            setData(data)
+            }
+            ).unwrap();
+            // setData(data)
         } catch (err) {
             toast.error(err?.data?.message || err.error);
         }
@@ -105,12 +117,17 @@ const Kanban = (props) => {
         try {
             const task = await createTask({ boardId, sectionId }).unwrap();
             console.log(task)
-            // setData(prevData => {
-            //     const newData = [...prevData];
-            //     const index = newData.findIndex(e => e.id === sectionId);
-            //     newData[index].tasks.unshift(task);
-            //     return newData;
-            // });
+            setData(prevData => {
+                const newData = [...prevData];
+                const index = newData.findIndex(e => e.id === sectionId);
+                if (index !== -1) {
+                    newData[index] = {
+                        ...newData[index],
+                        tasks: [task, ...newData[index].tasks]
+                    };
+                }
+                return newData;
+            });
         } catch (err) {
             toast.error(err?.data?.message || err.error);
         }

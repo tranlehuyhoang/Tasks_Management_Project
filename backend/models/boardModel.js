@@ -46,6 +46,6 @@ const boardSchema = mongoose.Schema(
 
 
 
-const Board = mongoose.model('boards', boardSchema);
+const Board = mongoose.model('Board', boardSchema);
 
 export default Board;

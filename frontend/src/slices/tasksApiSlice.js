@@ -26,7 +26,7 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
         }),
         updatePositionTask: builder.mutation({
             query: (data) => ({
-                url: `${TASKS_URL}/${data.taskId}`,
+                url: `${TASKS_URL}/update-position`,
                 method: 'PUT',
                 body: data,
             }),

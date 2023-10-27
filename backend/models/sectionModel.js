@@ -25,6 +25,7 @@ const sectionSchema = mongoose.Schema(
 
 
 
-const Section = mongoose.model('sctions', sectionSchema);
+const Section = mongoose.model('Section', sectionSchema);
+
 
 export default Section;

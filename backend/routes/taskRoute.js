@@ -9,11 +9,9 @@ import {
 import { protect } from '../middleware/authMiddleware.js';
 const router = express.Router();
 router.post('/', createTask);
-router.put('/update-position', updateTask);
+router.put('/update-position', updatePosition);
 router.delete('/:taskId', deleteTask);
-router.put('/:taskId', updatePosition);
-
-
+router.put('/:taskId', updateTask);
 
 
 export default router

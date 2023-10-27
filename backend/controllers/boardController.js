@@ -16,7 +16,7 @@ const createBoard = asyncHandler(async (req, res) => {
         })
         res.status(201).json(board)
     } catch (err) {
-        res.status(500).json(err)
+        throw new Error(err)
     }
 
 
@@ -28,7 +28,7 @@ const getAll = asyncHandler(async (req, res) => {
             boards
         )
     } catch (err) {
-        res.status(500).json(err)
+        throw new Error(err)
     }
 
 })
@@ -46,7 +46,7 @@ const getOne = asyncHandler(async (req, res) => {
         board._doc.sections = sections
         res.status(200).json(board)
     } catch (err) {
-        throw new Error('Board not found')
+        throw new Error(err)
     }
 
 })
@@ -63,7 +63,7 @@ const updatePosition = asyncHandler(async (req, res) => {
         }
         res.status(200).json('updated')
     } catch (err) {
-        res.status(500).json(err)
+        throw new Error(err)
     }
 
 })
@@ -102,7 +102,7 @@ const update = asyncHandler(async (req, res) => {
         )
         res.status(200).json(board)
     } catch (err) {
-        res.status(500).json(err)
+        throw new Error(err)
     }
 
 })
@@ -114,7 +114,7 @@ const getFavourites = asyncHandler(async (req, res) => {
         }).sort('-favouritePosition')
         res.status(200).json(favourites)
     } catch (err) {
-        res.status(500).json(err)
+        throw new Error(err)
     }
 
 })
@@ -130,7 +130,7 @@ const updateFavouritePosition = asyncHandler(async (req, res) => {
         }
         res.status(200).json('updated')
     } catch (err) {
-        res.status(500).json(err)
+        throw new Error(err)
     }
 
 })
@@ -175,7 +175,7 @@ const deleteBoard = asyncHandler(async (req, res) => {
 
         res.status(200).json('deleted')
     } catch (err) {
-        res.status(500).json(err)
+        throw new Error(err)
     }
 })
 
