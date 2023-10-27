@@ -9,7 +9,7 @@ const sectionSchema = mongoose.Schema(
         },
         title: {
             type: String,
-            default: ''
+            default: 'Untitled'
         }
     },
     {

@@ -11,6 +11,7 @@ import { setBoards } from '../slices/boardSlice'
 import { setFavoriteList } from '../slices/boardFavoriteSlice'
 import Loading from '../components/common/Loading'
 import Kanban from '../components/common/Kanban'
+import { toast } from 'react-toastify'
 let timer
 const timeout = 500
 const Board = () => {
@@ -35,10 +36,9 @@ const Board = () => {
 
     useEffect(() => {
         const getBoard = async () => {
-            console.log(boardId)
             try {
                 const res = await getOne(boardId).unwrap();
-
+                console.log(res)
                 setTitle(res.title)
                 setDescription(res.description)
                 setSections(res.sections)
@@ -46,7 +46,7 @@ const Board = () => {
                 setIcon(res.icon)
             } catch (err) {
                 navigate('/boards')
-                console.log(err)
+                toast.error(err?.data?.message || err.error);
             }
         }
         getBoard()
@@ -74,7 +74,7 @@ const Board = () => {
                 boardId: boardId
             })
         } catch (err) {
-            alert(err)
+            toast.error(err?.data?.message || err.error);
         }
     }
 
@@ -103,7 +103,7 @@ const Board = () => {
                     title: newTitle
                 })
             } catch (err) {
-                alert(err)
+                toast.error(err?.data?.message || err.error);
             }
         }, timeout);
     }
@@ -116,7 +116,7 @@ const Board = () => {
             try {
                 await update({ boardId: boardId, description: newDescription })
             } catch (err) {
-                alert(err)
+                toast.error(err?.data?.message || err.error);
             }
         }, timeout);
     }
@@ -133,7 +133,7 @@ const Board = () => {
             dispatch(setFavoriteList(newFavouriteList))
             setIsFavourite(!isFavourite)
         } catch (err) {
-            console.log(err)
+            toast.error(err?.data?.message || err.error);
         }
     }
 
@@ -153,7 +153,7 @@ const Board = () => {
             }
             dispatch(setBoards(newList))
         } catch (err) {
-            console.log(err)
+            toast.error(err?.data?.message || err.error);
         }
     }
     return (

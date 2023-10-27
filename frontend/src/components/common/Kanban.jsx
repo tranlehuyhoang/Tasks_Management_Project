@@ -4,7 +4,7 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { useCreateSectionMutation, useDeleteSectionMutation, useUpdateSectionMutation } from '../../slices/sectionsApiSlice'
-
+import { toast } from 'react-toastify'
 let timer
 const timeout = 500
 
@@ -18,6 +18,7 @@ const Kanban = (props) => {
 
     useEffect(() => {
         setData(props.data)
+        console.log(props.data)
     }, [props.data])
 
     const createSections = async () => {
@@ -25,11 +26,12 @@ const Kanban = (props) => {
             const section = await createSection(boardId).unwrap();
             setData([...data, section])
         } catch (err) {
-            console.log(err)
+            toast.error(err?.data?.message || err.error);
         }
     }
 
     const onDragEnd = async ({ source, destination }) => {
+        console.log({ source, destination })
         if (!destination) return
         const sourceColIndex = data.findIndex(e => e.id === source.droppableId)
         const destinationColIndex = data.findIndex(e => e.id === destination.droppableId)
@@ -62,18 +64,41 @@ const Kanban = (props) => {
             }).unwrap();
             setData(data)
         } catch (err) {
-            alert(err)
+            toast.error(err?.data?.message || err.error);
         }
     }
     const deleteSections = async (sectionId) => {
         try {
-            await deleteSection(boardId, sectionId).unwrap()
+            await deleteSection({ boardId, sectionId }).unwrap()
+
             const newData = [...data].filter(e => e.id !== sectionId)
+            console.log(newData)
             setData(newData)
         } catch (err) {
-            alert(err)
+            toast.error(err?.data?.message || err.error);
         }
     }
+
+
+
+    const updateSectionTitle = async (e, sectionId) => {
+        clearTimeout(timer);
+        const newTitle = e.target.value;
+        const newData = data.map(item => {
+            if (item.id === sectionId) {
+                return { ...item, title: newTitle };
+            }
+            return item;
+        });
+        setData(newData);
+        timer = setTimeout(async () => {
+            try {
+                await updateSection({ boardId, sectionId, title: newTitle }).unwrap();
+            } catch (err) {
+                toast.error(err?.data?.message || err.error);
+            }
+        }, timeout);
+    };
     return (
         <>
             <Box sx={{
@@ -114,7 +139,7 @@ const Kanban = (props) => {
                                             }}>
                                                 <TextField
                                                     value={section.title}
-
+                                                    onChange={(e) => updateSectionTitle(e, section.id)}
                                                     placeholder='Untitled'
                                                     variant='outlined'
                                                     sx={{

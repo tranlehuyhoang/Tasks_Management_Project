@@ -5,6 +5,7 @@ import { useParams, Link } from 'react-router-dom'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { setFavoriteList } from '../../slices/boardFavoriteSlice'
 import { useGetFavouritesMutation, useUpdateFavouritePositionMutation } from '../../slices/boardsApiSlice'
+import { toast } from 'react-toastify'
 const FavouriteList = () => {
     const dispatch = useDispatch()
     const list = useSelector((state) => state.favorite.value)
@@ -20,7 +21,7 @@ const FavouriteList = () => {
                 console.log(res)
                 dispatch(setFavoriteList(res))
             } catch (err) {
-                console.log(err)
+                toast.error(err?.data?.message || err.error);
             }
         }
         getBoards()

@@ -10,6 +10,7 @@ import { setBoards } from '../../slices/boardSlice';
 import { useCreateBoardMutation, useGetAllMutation, useUpdatePositionMutation } from '../../slices/boardsApiSlice';
 import { logout } from '../../slices/authSlice';
 import FavouriteList from './FavouriteList';
+import { toast } from 'react-toastify'
 const SliderBar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const SliderBar = () => {
 
                 dispatch(setBoards(res));
             } catch (err) {
-                console.log(err)
+                toast.error(err?.data?.message || err.error);
             }
         }
         getBoards()
@@ -75,7 +76,7 @@ const SliderBar = () => {
             // await useUpdatePositionMutation({ boards: newList })
             const res = await updatePosition({ boards: newList }).unwrap();
         } catch (err) {
-            console.log(err);
+            toast.error(err?.data?.message || err.error);
         }
     };
 
@@ -86,7 +87,7 @@ const SliderBar = () => {
             dispatch(setBoards(newList))
             navigate(`/boards/${res.id}`)
         } catch (err) {
-            alert(err)
+            toast.error(err?.data?.message || err.error);
         }
     }
 

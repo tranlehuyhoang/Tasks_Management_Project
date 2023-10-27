@@ -46,9 +46,7 @@ const getOne = asyncHandler(async (req, res) => {
         board._doc.sections = sections
         res.status(200).json(board)
     } catch (err) {
-        res.status(500).json({
-            boardId
-        })
+        throw new Error('Board not found')
     }
 
 })

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 import LoadingButton from '@mui/lab/LoadingButton'
 import { useCreateBoardMutation } from '../slices/boardsApiSlice'
 import { setBoards } from '../slices/boardSlice'
+import { toast } from 'react-toastify'
 const Home = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -22,7 +23,7 @@ const Home = () => {
             dispatch(setBoards([res]))
             navigate(`/boards/${res.id}`)
         } catch (err) {
-            alert(err)
+            toast.error(err?.data?.message || err.error);
         } finally {
             setLoading(false)
         }
