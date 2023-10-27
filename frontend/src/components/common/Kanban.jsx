@@ -1,11 +1,11 @@
-import { Box, Button, Typography, Divider, TextField, IconButton, Card } from '@mui/material'
+import { Box, Button, Typography, Divider, TextField, IconButton, Card, ListItemButton } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { useCreateSectionMutation, useDeleteSectionMutation, useUpdateSectionMutation } from '../../slices/sectionsApiSlice'
 import { toast } from 'react-toastify'
-import { useCreateTaskMutation, useUpdatePositionTaskMutation } from '../../slices/tasksApiSlice'
+import { useCreateTaskMutation, useDeleteTaskMutation, useUpdatePositionTaskMutation } from '../../slices/tasksApiSlice'
 let timer
 const timeout = 500
 
@@ -18,10 +18,10 @@ const Kanban = (props) => {
     const [updateSection] = useUpdateSectionMutation();
     const [updatePositionTask] = useUpdatePositionTaskMutation();
     const [createTask] = useCreateTaskMutation();
+    const [deleteTask] = useDeleteTaskMutation();
 
     useEffect(() => {
         setData(props.data)
-        console.log(props.data)
     }, [props.data])
 
     const createSections = async () => {
@@ -34,8 +34,12 @@ const Kanban = (props) => {
     }
 
     const onDragEnd = async ({ source, destination }) => {
-        console.log({ source, destination })
         if (!destination) return
+
+        if (destination.droppableId == 'delete') {
+            console.log('delete', source.droppableId)
+            return
+        }
         const sourceColIndex = data.findIndex(e => e.id === source.droppableId)
         const destinationColIndex = data.findIndex(e => e.id === destination.droppableId)
         const sourceCol = data[sourceColIndex]
@@ -46,7 +50,6 @@ const Kanban = (props) => {
 
         const sourceTasks = [...sourceCol.tasks]
         const destinationTasks = [...destinationCol.tasks]
-
 
         if (source.droppableId !== destination.droppableId) {
             const [removed] = sourceTasks.splice(source.index, 1)
@@ -86,7 +89,6 @@ const Kanban = (props) => {
             await deleteSection({ boardId, sectionId }).unwrap()
 
             const newData = [...data].filter(e => e.id !== sectionId)
-            console.log(newData)
             setData(newData)
         } catch (err) {
             toast.error(err?.data?.message || err.error);
@@ -116,7 +118,6 @@ const Kanban = (props) => {
     const createTasks = async (sectionId) => {
         try {
             const task = await createTask({ boardId, sectionId }).unwrap();
-            console.log(task)
             setData(prevData => {
                 const newData = [...prevData];
                 const index = newData.findIndex(e => e.id === sectionId);
@@ -148,12 +149,65 @@ const Kanban = (props) => {
             </Box>
             <Divider sx={{ margin: '10px 0' }} />
             <DragDropContext onDragEnd={onDragEnd}>
+
+                <Box sx={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    width: 'calc(100vw - 400px)',
+                    overflowX: 'auto',
+                    justifyContent: 'space-around',
+                    gap: '50px'
+
+
+                }}>
+                    <Droppable key={'menber-key'} droppableId={'menber'}>
+                        {(provided) => (
+                            <Box
+                                bgcolor={'rgb(66, 165, 245)'}
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0' }}
+                            >
+                                {provided.placeholder}
+                                Menbers
+                            </Box>
+                        )}
+                    </Droppable>
+                    <Droppable key={'delete-key'} droppableId={'update'}>
+                        {(provided) => (
+                            <Box
+                                bgcolor={'rgb(102, 187, 106)'}
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0', transition: 'height 0.3s', }}
+
+                            >
+                                {provided.placeholder}
+                                Update
+                            </Box>
+                        )}
+                    </Droppable>
+                    <Droppable key={'delete-key'} droppableId={'delete'}>
+                        {(provided) => (
+                            <Box
+                                bgcolor={'rgb(244, 67, 54)'}
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0' }}
+                            >
+                                {provided.placeholder}
+                                Delete
+                            </Box>
+                        )}
+                    </Droppable>
+                </Box>
                 <Box sx={{
                     display: 'flex',
                     alignItems: 'flex-start',
                     width: 'calc(100vw - 400px)',
                     overflowX: 'auto'
                 }}>
+
                     {
                         data.map(section => (
                             <div key={section.id} style={{ width: '300px' }}>
@@ -233,9 +287,14 @@ const Kanban = (props) => {
                                         </Box>
                                     )}
                                 </Droppable>
+
                             </div>
                         ))
                     }
+
+
+
+
                 </Box>
             </DragDropContext>
 
