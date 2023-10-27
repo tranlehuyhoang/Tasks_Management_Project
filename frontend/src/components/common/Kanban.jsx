@@ -5,6 +5,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { useCreateSectionMutation, useDeleteSectionMutation, useUpdateSectionMutation } from '../../slices/sectionsApiSlice'
 import { toast } from 'react-toastify'
+import { useCreateTaskMutation } from '../../slices/tasksApiSlice'
 let timer
 const timeout = 500
 
@@ -15,6 +16,7 @@ const Kanban = (props) => {
     const [createSection, { isLoading }] = useCreateSectionMutation();
     const [deleteSection] = useDeleteSectionMutation();
     const [updateSection] = useUpdateSectionMutation();
+    const [createTask] = useCreateTaskMutation();
 
     useEffect(() => {
         setData(props.data)
@@ -99,6 +101,20 @@ const Kanban = (props) => {
             }
         }, timeout);
     };
+    const createTasks = async (sectionId) => {
+        try {
+            const task = await createTask({ boardId, sectionId }).unwrap();
+            console.log(task)
+            // setData(prevData => {
+            //     const newData = [...prevData];
+            //     const index = newData.findIndex(e => e.id === sectionId);
+            //     newData[index].tasks.unshift(task);
+            //     return newData;
+            // });
+        } catch (err) {
+            toast.error(err?.data?.message || err.error);
+        }
+    };
     return (
         <>
             <Box sx={{
@@ -156,7 +172,7 @@ const Kanban = (props) => {
                                                         color: 'gray',
                                                         '&:hover': { color: 'green' }
                                                     }}
-
+                                                    onClick={() => createTasks(section.id)}
                                                 >
                                                     <AddOutlinedIcon />
                                                 </IconButton>

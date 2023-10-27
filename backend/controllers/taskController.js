@@ -1,12 +1,12 @@
 import asyncHandler from 'express-async-handler';
 
-import Board from '../models/boardModel';
-import Section from '../models/sectionModel';
-import Task from '../models/taskModel';
+import Board from '../models/boardModel.js';
+import Section from '../models/sectionModel.js';
+import Task from '../models/taskModel.js';
 import User from '../models/userModel.js';
 
 
-const create = asyncHandler(async (req, res) => {
+const createTask = async (req, res) => {
     const { sectionId } = req.body
     try {
         const section = await Section.findById(sectionId)
@@ -20,9 +20,9 @@ const create = asyncHandler(async (req, res) => {
     } catch (err) {
         res.status(500).json(err)
     }
+}
 
-})
-const update = asyncHandler(async (req, res) => {
+const updateTask = async (req, res) => {
     const { taskId } = req.params
     try {
         const task = await Task.findByIdAndUpdate(
@@ -33,9 +33,9 @@ const update = asyncHandler(async (req, res) => {
     } catch (err) {
         res.status(500).json(err)
     }
+}
 
-});
-const deleteSection = asyncHandler(async (req, res) => {
+const deleteTask = async (req, res) => {
     const { taskId } = req.params
     try {
         const currentTask = await Task.findById(taskId)
@@ -51,8 +51,9 @@ const deleteSection = asyncHandler(async (req, res) => {
     } catch (err) {
         res.status(500).json(err)
     }
-})
-const updatePosition = asyncHandler(async (req, res) => {
+}
+
+const updatePosition = async (req, res) => {
     const {
         resourceList,
         destinationList,
@@ -90,11 +91,10 @@ const updatePosition = asyncHandler(async (req, res) => {
     } catch (err) {
         res.status(500).json(err)
     }
-})
-
+}
 export {
-    create
-    , update
-    , deleteSection
+    createTask
+    , updateTask
+    , deleteTask
     , updatePosition
 }

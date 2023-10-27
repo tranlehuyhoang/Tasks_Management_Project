@@ -1,10 +1,18 @@
 import express from 'express';
 
-import { registerUser, authUser, getProfileUser } from '../controllers/boardController';
+import {
+    createTask
+    , updateTask
+    , deleteTask
+    , updatePosition
+} from '../controllers/taskController.js';
 import { protect } from '../middleware/authMiddleware.js';
 const router = express.Router();
-router.post('/register', registerUser);
-router.post('/auth', authUser);
+router.post('/', createTask);
+router.put('/update-position', updateTask);
+router.delete('/:taskId', deleteTask);
+router.put('/:taskId', updatePosition);
+
 
 
 
