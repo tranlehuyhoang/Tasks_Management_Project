@@ -38,7 +38,7 @@ const Board = () => {
         const getBoard = async () => {
             try {
                 const res = await getOne(boardId).unwrap();
-                console.log(res)
+                // console.log(res)
                 setTitle(res.title)
                 setDescription(res.description)
                 setSections(res.sections)

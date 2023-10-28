@@ -166,6 +166,20 @@ const Kanban = (props) => {
             toast.error(err?.data?.message || err.error);
         }
     };
+    const onUpdateTask = (task) => {
+        const newData = [...data]
+        const sectionIndex = newData.findIndex(e => e.id === task.section.id)
+        const taskIndex = newData[sectionIndex].tasks.findIndex(e => e.id === task.id)
+        newData[sectionIndex].tasks[taskIndex] = task
+        setData(newData)
+    }
+    const onUpdateTaskTitle = (task) => {
+        const newData = [...data]
+        const sectionIndex = newData.findIndex(e => e.id === task.section.id)
+        const taskIndex = newData[sectionIndex].tasks.findIndex(e => e.id === task.id)
+        newData[sectionIndex].tasks[taskIndex] = task
+        setData(newData)
+    }
     return (
         <>
             <Box sx={{
@@ -309,7 +323,7 @@ const Kanban = (props) => {
                                                                 onClick={() => setSelectedTask(task)}
                                                             >
                                                                 <Typography>
-                                                                    {task.title === '' ? 'Untitled' : task.title}
+                                                                    {task.title === '' ? index + 1 + ":" + "  " + 'Untitled' : index + 1 + ":" + "  " + task.title}
                                                                 </Typography>
                                                             </Card>
                                                         )}
@@ -330,7 +344,7 @@ const Kanban = (props) => {
 
                 </Box>
             </DragDropContext>
-            <TaskModal task={taskIdModal} open={open} setOpen={setOpen} />
+            <TaskModal task={taskIdModal} open={open} setOpen={setOpen} setData={setData} dataBoard={data} onUpdateTask={onUpdateTask} onUpdateTaskTitle={onUpdateTaskTitle} />
 
         </>
     )
