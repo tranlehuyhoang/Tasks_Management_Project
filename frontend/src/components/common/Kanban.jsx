@@ -6,11 +6,14 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { useCreateSectionMutation, useDeleteSectionMutation, useUpdateSectionMutation } from '../../slices/sectionsApiSlice'
 import { toast } from 'react-toastify'
 import { useCreateTaskMutation, useDeleteTaskMutation, useUpdatePositionTaskMutation } from '../../slices/tasksApiSlice'
+import TaskModal from './TaskModal'
 let timer
 const timeout = 500
 
 const Kanban = (props) => {
     const boardId = props.boardId
+    const [taskIdModal, setTaskIdModal] = useState()
+    const [open, setOpen] = useState(false)
     const [data, setData] = useState([])
     const [selectedTask, setSelectedTask] = useState(undefined)
     const [createSection, { isLoading }] = useCreateSectionMutation();
@@ -53,11 +56,21 @@ const Kanban = (props) => {
                     return newData; // Return the updated data array to set the state
                 });
                 await deleteTask({ taskId: data[sourceColIndex].tasks[source.index].id }).unwrap();
-
+                toast.success('Delete Task Success');
 
             } catch (err) {
                 toast.error(err?.data?.message || err.error);
             }
+            return
+        }
+        if (destination.droppableId == 'update') {
+            const sourceColIndex = data.findIndex(e => e.id === source.droppableId)
+
+
+            setTaskIdModal(data[sourceColIndex].tasks[source.index])
+            // console.log(data[sourceColIndex].tasks[source.index])
+            setOpen(true);
+
             return
         }
         const sourceColIndex = data.findIndex(e => e.id === source.droppableId)
@@ -180,7 +193,7 @@ const Kanban = (props) => {
 
 
                 }}>
-                    <Droppable key={'menber-key'} droppableId={'menber'}>
+                    <Droppable key={'views-key'} droppableId={'views'}>
                         {(provided) => (
                             <Box
                                 bgcolor={'rgb(66, 165, 245)'}
@@ -189,7 +202,7 @@ const Kanban = (props) => {
                                 sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0' }}
                             >
                                 {provided.placeholder}
-                                Menbers
+                                View
                             </Box>
                         )}
                     </Droppable>
@@ -282,7 +295,7 @@ const Kanban = (props) => {
                                             {/* tasks */}
                                             {
                                                 section.tasks.map((task, index) => (
-                                                    <Draggable key={task.id} draggableId={task.id} index={index}>
+                                                    <Draggable key={task.id} draggableId={task.id} index={index} >
                                                         {(provided, snapshot) => (
                                                             <Card
                                                                 ref={provided.innerRef}
@@ -317,6 +330,7 @@ const Kanban = (props) => {
 
                 </Box>
             </DragDropContext>
+            <TaskModal task={taskIdModal} open={open} setOpen={setOpen} />
 
         </>
     )
