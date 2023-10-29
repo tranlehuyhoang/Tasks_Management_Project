@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, Drawer, IconButton, List, ListItem, ListItemButton, Typography } from '@mui/material';
+import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, Typography } from '@mui/material';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -12,6 +12,7 @@ import { logout } from '../../slices/authSlice';
 import FavouriteList from './FavouriteList';
 import { toast } from 'react-toastify'
 const SliderBar = () => {
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { boardId } = useParams()
@@ -96,8 +97,10 @@ const SliderBar = () => {
             container={window.document.body}
             variant='permanent'
             open={true}
+
             sx={{
                 width: sidebarWidth,
+                color: 'white',
                 height: '100vh',
                 '& > div': { borderRight: 'none' }
             }}
@@ -107,6 +110,7 @@ const SliderBar = () => {
                 sx={{
                     width: sidebarWidth,
                     height: '100vh',
+                    color: 'white',
                     backgroundColor: assets.colors.secondary
                 }}
             >
@@ -114,7 +118,7 @@ const SliderBar = () => {
                     <Box sx={{
                         width: '100%',
                         display: 'flex',
-                        alignItems: 'center',
+                        alignItems: 'center', color: 'white',
                         justifyContent: 'space-between'
                     }}>
 
@@ -129,33 +133,18 @@ const SliderBar = () => {
                         )}
 
                         <IconButton onClick={logouts}>
-                            <LogoutOutlinedIcon fontSize='small' />
+                            <LogoutOutlinedIcon fontSize='small' style={{ color: 'white' }} />
                         </IconButton>
                     </Box>
                 </ListItem>
-                <Box sx={{ paddingTop: '10px' }} >
-                    <ListItem>
-                        <Box sx={{
-                            width: '100%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between'
-                        }}>
-                            <Typography variant='body2' fontWeight='700'>
-                                Favorite
-                            </Typography>
-                            <IconButton >
-                                <AddBoxOutlinedIcon fontSize='small' />
-                            </IconButton>
-                        </Box>
-                    </ListItem>
-                </Box>
-                <Box sx={{ paddingTop: '10px' }} />
+                <Divider />
+                <Box sx={{ paddingTop: '10px', color: 'white', }} />
                 <FavouriteList />
+                <Divider />
                 <ListItem>
                     <Box sx={{
                         width: '100%',
-                        display: 'flex',
+                        display: 'flex', color: 'white',
                         alignItems: 'center',
                         justifyContent: 'space-between'
                     }}>
@@ -163,7 +152,7 @@ const SliderBar = () => {
                             Private
                         </Typography>
                         <IconButton onClick={addBoard}>
-                            <AddBoxOutlinedIcon fontSize='small' />
+                            <AddBoxOutlinedIcon fontSize='small' style={{ color: 'white' }} />
                         </IconButton>
                     </Box>
                 </ListItem>
@@ -183,14 +172,14 @@ const SliderBar = () => {
                                                     component={Link}
                                                     to={`/boards/${item.id}`}
                                                     sx={{
-                                                        pl: '20px',
+                                                        pl: '20px', color: 'white',
                                                         cursor: snapshot.isDragging ? 'grab' : 'pointer!important'
                                                     }}
                                                 >
                                                     <Typography
                                                         variant='body2'
                                                         fontWeight='700'
-                                                        sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                                                        sx={{ whiteSpace: 'nowrap', color: 'white', overflow: 'hidden', textOverflow: 'ellipsis' }}
                                                     >
                                                         {item.icon} {item.title}
                                                     </Typography>
@@ -204,6 +193,7 @@ const SliderBar = () => {
                         )}
                     </Droppable>
                 </DragDropContext>
+                <Divider />
             </List>
         </Drawer>
     )

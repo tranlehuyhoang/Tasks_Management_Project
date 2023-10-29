@@ -166,19 +166,53 @@ const Kanban = (props) => {
             toast.error(err?.data?.message || err.error);
         }
     };
-    const onUpdateTask = (task) => {
-        const newData = [...data]
-        const sectionIndex = newData.findIndex(e => e.id === task.section.id)
-        const taskIndex = newData[sectionIndex].tasks.findIndex(e => e.id === task.id)
-        newData[sectionIndex].tasks[taskIndex] = task
-        setData(newData)
+    const onUpdateTask = async (tasksss) => {
+        console.log(data)
+        // setData(prevData => {
+        //     const newData = [...prevData];
+        //     const sectionIndex = newData.findIndex(e => e.id === tasksss.section.id)
+        //     if (sectionIndex !== -1) {
+        //         newData[sectionIndex] = {
+        //             ...newData[sectionIndex],
+        //             tasks: [tasksss, ...newData[sectionIndex].tasks]
+        //         };
+        //     }
+        //     return newData;
+        // });
+
     }
-    const onUpdateTaskTitle = (task) => {
-        const newData = [...data]
-        const sectionIndex = newData.findIndex(e => e.id === task.section.id)
-        const taskIndex = newData[sectionIndex].tasks.findIndex(e => e.id === task.id)
-        newData[sectionIndex].tasks[taskIndex] = task
-        setData(newData)
+    const onUpdateTaskTitle = async (title, sectionId, taskId, taskPositon) => {
+        // console.log(title, sectionId, taskId, taskPositon)
+        // console.log('mảng sections cũ: ', data)
+        // const sectionIndex = data.findIndex(e => e.id === sectionId)
+        // console.log('mảng sections cần update :', data[sectionIndex])
+        // console.log('task trong section cần update :', data[sectionIndex].tasks[taskPositon])
+        // console.log('title cần update :', title)
+        // console.log(data[sectionIndex].tasks)
+        // const indexTask = data[sectionIndex].tasks.findIndex(task => task.id === taskId);
+        // console.log(data[sectionIndex].tasks[indexTask])
+
+        setData(prevData => {
+            const newData = [...prevData];
+            const sectionIndex = newData.findIndex(e => e.id === sectionId);
+            if (sectionIndex !== -1) {
+                const taskIndex = newData[sectionIndex].tasks.findIndex(task => task.id === taskId);
+                if (taskIndex !== -1) {
+                    const updatedTask = {
+                        ...newData[sectionIndex].tasks[taskIndex],
+                        title: title
+                    };
+
+                    newData[sectionIndex].tasks = [
+                        ...newData[sectionIndex].tasks.slice(0, taskIndex),
+                        updatedTask,
+                        ...newData[sectionIndex].tasks.slice(taskIndex + 1)
+                    ];
+                }
+            }
+            return newData;
+        });
+
     }
     return (
         <>
@@ -203,7 +237,7 @@ const Kanban = (props) => {
                     width: 'calc(100vw - 400px)',
                     overflowX: 'auto',
                     justifyContent: 'space-around',
-                    gap: '50px'
+                    gap: '10px'
 
 
                 }}>
@@ -213,7 +247,7 @@ const Kanban = (props) => {
                                 bgcolor={'rgb(66, 165, 245)'}
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
-                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0' }}
+                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0', backgroundColor: '#F2F2F2' }}
                             >
                                 {provided.placeholder}
                                 View
@@ -226,7 +260,7 @@ const Kanban = (props) => {
                                 bgcolor={'rgb(102, 187, 106)'}
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
-                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0', transition: 'height 0.3s', }}
+                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0', transition: 'height 0.3s', backgroundColor: '#F2F2F2' }}
 
                             >
                                 {provided.placeholder}
@@ -240,7 +274,7 @@ const Kanban = (props) => {
                                 bgcolor={'rgb(244, 67, 54)'}
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
-                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0' }}
+                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0', backgroundColor: '#F2F2F2' }}
                             >
                                 {provided.placeholder}
                                 Delete
@@ -256,23 +290,26 @@ const Kanban = (props) => {
                 }}>
 
                     {
-                        data.map(section => (
-                            <div key={section.id} style={{ width: '300px' }}>
+                        data.map((section, index) => (
+                            <div key={section.id} style={{ width: '300px', margin: '10px' }}>
                                 <Droppable key={section.id} droppableId={section.id}>
                                     {(provided) => (
                                         <Box
                                             ref={provided.innerRef}
                                             {...provided.droppableProps}
-                                            sx={{ width: '300px', padding: '10px', marginRight: '10px' }}
+                                            sx={{ width: '300px', padding: '10px', marginRight: '10px', backgroundColor: '#F2F2F2', borderRadius: '10px' }}
                                         >
+                                            <Divider sx={{ margin: '10px 0' }} style={{ borderWidth: '2px' }} className={`hehehe${index}`} />
+
                                             <Box sx={{
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'space-between',
-                                                marginBottom: '10px'
+                                                marginBottom: '10px',
                                             }}>
                                                 <TextField
                                                     value={section.title}
+                                                    className={`hehehe${index}`}
                                                     onChange={(e) => updateSectionTitle(e, section.id)}
                                                     placeholder='Untitled'
                                                     variant='outlined'

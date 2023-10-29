@@ -54,7 +54,7 @@ const TaskModal = ({ task, open, setOpen, setData, dataBoard, onUpdateTask, onUp
                 toast.error(err?.data?.message || err.error);
             }
         }, timeout);
-        task.content = data
+        // task.content = data
 
         // setData(newData); // Set the updated dataBoard state
         onUpdateTask(task)
@@ -67,17 +67,17 @@ const TaskModal = ({ task, open, setOpen, setData, dataBoard, onUpdateTask, onUp
         clearTimeout(timer);
         timer = setTimeout(async () => {
             try {
+                // console.log(task)
                 const res = await updateTask({ taskId: task.id, title: event.target.value }).unwrap();
-                setTask(res);
+                await onUpdateTaskTitle(event.target.value, task.section.id, task.id, task.position)
             } catch (err) {
                 toast.error(err?.data?.message || err.error);
             }
         }, timeout);
-        task.title = event.target.value
-        console.log(task)
 
 
-        onUpdateTaskTitle(task)
+
+
     };
     return (
         <div>
