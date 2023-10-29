@@ -87,12 +87,13 @@ const TaskViewModal = ({ task, open, setOpen }) => {
                                     '& .MuiOutlinedInput-root': { fontSize: '2rem', fontWeight: '700' }
                                 }}
                             />
-                            <div dangerouslySetInnerHTML={{ __html: content }}></div>
-                            <button onClick={() => this.handlePrint()}>In</button>
-                            <ReactToPrint
-                                trigger={() => <button>In</button>}
-                                content={() => this}
-                            />
+                            <div style={{
+                                overflowY: 'scroll',
+                                height: '600px',
+                                display: 'flex'
+                            }}>
+                                <div dangerouslySetInnerHTML={{ __html: content }}></div></div>
+
 
                         </Box>
 

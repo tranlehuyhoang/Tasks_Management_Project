@@ -42,7 +42,7 @@ const EmojiPicker = ({ icon, onChange }) => {
                 display: isShowPicker ? 'block' : 'none',
                 position: 'absolute',
                 top: '100%',
-                zIndex: '9999'
+                zIndex: '9999999'
             }}>
                 <Picker theme='dark' onEmojiSelect={selectEmoji} showPreview={false} />
             </Box>
