@@ -13,11 +13,11 @@ const boardSchema = mongoose.Schema(
         },
         title: {
             type: String,
-            default: 'Untitled'
+            default: '✎ Untitled '
         },
         description: {
             type: String,
-            default: `Add description here
+            default: `✎ Add description here
             🟢 You can add multiline description
             🟢 Let's start...`
         },

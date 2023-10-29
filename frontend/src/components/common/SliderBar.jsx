@@ -137,24 +137,25 @@ const SliderBar = () => {
                         </IconButton>
                     </Box>
                 </ListItem>
-                <Divider />
                 <Box sx={{ paddingTop: '10px', color: 'white', }} />
                 <FavouriteList />
-                <Divider />
                 <ListItem>
                     <Box sx={{
                         width: '100%',
                         display: 'flex', color: 'white',
                         alignItems: 'center',
-                        justifyContent: 'space-between'
+                        justifyContent: 'space-between',
+                        borderBottom: '1px solid',
                     }}>
                         <Typography variant='body2' fontWeight='700'>
                             Private
                         </Typography>
+
                         <IconButton onClick={addBoard}>
                             <AddBoxOutlinedIcon fontSize='small' style={{ color: 'white' }} />
                         </IconButton>
                     </Box>
+
                 </ListItem>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Droppable key={'list-board-droppable-key'} droppableId={'list-board-droppable'}>
@@ -193,7 +194,6 @@ const SliderBar = () => {
                         )}
                     </Droppable>
                 </DragDropContext>
-                <Divider />
             </List>
         </Drawer>
     )

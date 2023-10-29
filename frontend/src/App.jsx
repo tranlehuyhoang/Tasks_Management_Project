@@ -13,12 +13,7 @@ import Register from './screen/Register.jsx';
 import Login from './screen/Login';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import LoginNew from './screen/new/LoginNew';
-import RegisterNew from './screen/new/RegisterNew';
-import HomeNew from './screen/new/HomeNew';
-import BoardNew from './screen/new/BoardNew';
-import AuthLayoutNew from './components/layout/new/AuthLayoutNew'
-import HomeLayoutNew from './components/layout/new/HomeLayoutNew'
+
 import { CssBaseline } from '@mui/material';
 function App() {
   const theme = createTheme({
@@ -44,25 +39,7 @@ function App() {
       </ThemeProvider>
       <ToastContainer />
     </>
-    // <>
 
-
-    //   <BrowserRouter>
-    //     <Routes>
-    //       <Route path='/' element={<AuthLayoutNew />}>
-    //         <Route path='/login' element={<LoginNew />} />
-    //         <Route path='/register' element={<RegisterNew />} />
-    //       </Route>
-    //       <Route path='/' element={<HomeLayoutNew />}>
-    //         <Route index element={<HomeNew />} />
-    //         <Route path='boards' element={<HomeNew />} />
-    //         <Route path='boards/:boardId' element={<BoardNew />} />
-    //       </Route>
-    //     </Routes>
-    //   </BrowserRouter>
-
-    //   <ToastContainer />
-    // </>
   );
 }
 

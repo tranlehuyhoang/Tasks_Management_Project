@@ -31,7 +31,7 @@ const EmojiPicker = ({ icon, onChange }) => {
     return (
         <Box sx={{ position: 'relative', width: 'max-content' }}>
             <Typography
-                variant='h3'
+                variant='h4'
                 fontWeight='700'
                 sx={{ cursor: 'pointer' }}
                 onClick={showPicker}

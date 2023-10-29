@@ -55,7 +55,8 @@ const FavouriteList = () => {
                     width: '100%',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between'
+                    justifyContent: 'space-between',
+                    borderBottom: '1px solid',
                 }}>
                     <Typography variant='body2' fontWeight='700'>
                         Favourites

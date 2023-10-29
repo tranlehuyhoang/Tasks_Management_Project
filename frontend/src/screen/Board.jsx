@@ -177,6 +177,19 @@ const Board = () => {
                             )
                         }
                     </IconButton>
+                    <EmojiPicker icon={icon} onChange={onIconChange} />
+                    <TextField
+                        value={title}
+                        onChange={updateTitle}
+                        placeholder='Untitled'
+                        variant='outlined'
+                        fullWidth
+                        sx={{
+                            '& .MuiOutlinedInput-input': { padding: 0 },
+                            '& .MuiOutlinedInput-notchedOutline': { border: 'unset ' },
+                            '& .MuiOutlinedInput-root': { fontSize: '20px', fontWeight: '700' }
+                        }}
+                    />
                     <IconButton variant='outlined' color='error' onClick={deleteBoards}>
                         <DeleteOutlinedIcon />
                     </IconButton>
@@ -184,19 +197,7 @@ const Board = () => {
                 <Box sx={{ padding: '10px 50px' }}>
                     <Box>
                         {/* emoji picker */}
-                        <EmojiPicker icon={icon} onChange={onIconChange} />
-                        <TextField
-                            value={title}
-                            onChange={updateTitle}
-                            placeholder='Untitled'
-                            variant='outlined'
-                            fullWidth
-                            sx={{
-                                '& .MuiOutlinedInput-input': { padding: 0 },
-                                '& .MuiOutlinedInput-notchedOutline': { border: 'unset ' },
-                                '& .MuiOutlinedInput-root': { fontSize: '2rem', fontWeight: '700' }
-                            }}
-                        />
+
                         <TextField
                             value={description}
                             onChange={updateDescription}

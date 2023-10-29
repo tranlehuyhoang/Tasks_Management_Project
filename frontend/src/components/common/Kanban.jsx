@@ -7,13 +7,22 @@ import { useCreateSectionMutation, useDeleteSectionMutation, useUpdateSectionMut
 import { toast } from 'react-toastify'
 import { useCreateTaskMutation, useDeleteTaskMutation, useUpdatePositionTaskMutation } from '../../slices/tasksApiSlice'
 import TaskModal from './TaskModal'
+import TaskViewModal from './TaskViewModal'
 let timer
 const timeout = 500
 
 const Kanban = (props) => {
     const boardId = props.boardId
     const [taskIdModal, setTaskIdModal] = useState()
+
+
+    const [deleteColor, setOpendeleteColor] = useState(true)
+    const [updateColor, setOpenupdateolor] = useState(true)
+    const [viewColor, setOpenviewColor] = useState(true)
+
+
     const [open, setOpen] = useState(false)
+    const [openview, setOpenView] = useState(false)
     const [data, setData] = useState([])
     const [selectedTask, setSelectedTask] = useState(undefined)
     const [createSection, { isLoading }] = useCreateSectionMutation();
@@ -40,6 +49,7 @@ const Kanban = (props) => {
         if (!destination) return
 
         if (destination.droppableId == 'delete') {
+            setOpendeleteColor(false)
             console.log('delete', source.droppableId)
             try {
                 const sourceColIndex = data.findIndex(e => e.id === source.droppableId)
@@ -57,19 +67,39 @@ const Kanban = (props) => {
                 });
                 await deleteTask({ taskId: data[sourceColIndex].tasks[source.index].id }).unwrap();
                 toast.success('Delete Task Success');
-
+                setOpendeleteColor(true)
             } catch (err) {
+                setOpendeleteColor(true)
+
                 toast.error(err?.data?.message || err.error);
             }
             return
         }
         if (destination.droppableId == 'update') {
+            setOpenupdateolor(!updateColor)
+
             const sourceColIndex = data.findIndex(e => e.id === source.droppableId)
 
 
             setTaskIdModal(data[sourceColIndex].tasks[source.index])
             // console.log(data[sourceColIndex].tasks[source.index])
             setOpen(true);
+            setOpenupdateolor(!updateColor)
+
+
+            return
+        }
+        if (destination.droppableId == 'views') {
+            setOpenviewColor(!updateColor)
+
+            const sourceColIndex = data.findIndex(e => e.id === source.droppableId)
+
+
+            setTaskIdModal(data[sourceColIndex].tasks[source.index])
+            // console.log(data[sourceColIndex].tasks[source.index])
+            setOpenView(true);
+            setOpenviewColor(!updateColor)
+
 
             return
         }
@@ -244,10 +274,12 @@ const Kanban = (props) => {
                     <Droppable key={'views-key'} droppableId={'views'}>
                         {(provided) => (
                             <Box
-                                bgcolor={'rgb(66, 165, 245)'}
+                                bgcolor={viewColor ? '#F2F2F2' : 'rgb(66, 165, 245)'}
+                                color={viewColor ? 'black' : 'white'}
+
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
-                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0', backgroundColor: '#F2F2F2' }}
+                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0', transition: ' 0.5s ease-in-out', }}
                             >
                                 {provided.placeholder}
                                 View
@@ -257,10 +289,12 @@ const Kanban = (props) => {
                     <Droppable key={'update-key'} droppableId={'update'}>
                         {(provided) => (
                             <Box
-                                bgcolor={'rgb(102, 187, 106)'}
+                                bgcolor={updateColor ? '#F2F2F2' : 'rgb(102, 187, 106)'}
+                                color={updateColor ? 'black' : 'white'}
+
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
-                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0', transition: 'height 0.3s', backgroundColor: '#F2F2F2' }}
+                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0', transition: ' 0.5s ease-in-out', }}
 
                             >
                                 {provided.placeholder}
@@ -271,10 +305,11 @@ const Kanban = (props) => {
                     <Droppable key={'delete-key'} droppableId={'delete'}>
                         {(provided) => (
                             <Box
-                                bgcolor={'rgb(244, 67, 54)'}
+                                bgcolor={deleteColor ? '#F2F2F2' : 'rgb(244, 67, 54)'}
+                                color={deleteColor ? 'black' : 'white'}
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
-                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0', backgroundColor: '#F2F2F2' }}
+                                sx={{ padding: '10px', minHeight: '50px', flex: '1 1 0', transition: ' 0.5s ease-in-out', }}
                             >
                                 {provided.placeholder}
                                 Delete
@@ -291,7 +326,7 @@ const Kanban = (props) => {
 
                     {
                         data.map((section, index) => (
-                            <div key={section.id} style={{ width: '300px', margin: '10px' }}>
+                            <div key={section.id} style={{ width: '300px', margin: '5px', marginTop: '10px' }}>
                                 <Droppable key={section.id} droppableId={section.id}>
                                     {(provided) => (
                                         <Box
@@ -371,7 +406,7 @@ const Kanban = (props) => {
                                         </Box>
                                     )}
                                 </Droppable>
-
+                                <p style={{ textAlign: 'center', color: 'gray' }}>Incoming tasks, waiting to be done</p>
                             </div>
                         ))
                     }
@@ -382,7 +417,7 @@ const Kanban = (props) => {
                 </Box>
             </DragDropContext>
             <TaskModal task={taskIdModal} open={open} setOpen={setOpen} setData={setData} dataBoard={data} onUpdateTask={onUpdateTask} onUpdateTaskTitle={onUpdateTaskTitle} />
-
+            <TaskViewModal task={taskIdModal} open={openview} setOpen={setOpenView} />
         </>
     )
 }
