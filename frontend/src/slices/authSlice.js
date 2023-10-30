@@ -14,7 +14,7 @@ const authSlice = createSlice({
             state.userInfo = action.payload;
             localStorage.setItem('userInfo', JSON.stringify(action.payload));
             const token = action.payload.token;
-            Cookies.set('jwt1', token, {
+            Cookies.set('jwt', token, {
                 expires: 30, // Expires in 30 days
                 secure: true, // Use secure cookies in production
                 sameSite: 'strict', // Prevent CSRF attacks
