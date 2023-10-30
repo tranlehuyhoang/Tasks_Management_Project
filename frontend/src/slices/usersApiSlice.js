@@ -32,7 +32,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         }),
         getalls: builder.mutation({
             query: (data) => ({
-                url: `http://localhost:5000/api/boards`,
+                url: `/api/boards`,
                 method: 'GET',
                 body: data,
             }),
