@@ -1,4 +1,4 @@
-import { Box, Button, Typography, Divider, TextField, IconButton, Card, ListItemButton } from '@mui/material'
+import { Box, Button, Typography, Divider, TextField, IconButton, Card, ListItemButton, Paper } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
@@ -296,7 +296,9 @@ const Kanban = (props) => {
                     </Droppable>
                     <Droppable key={'delete-key'} droppableId={'delete'}>
                         {(provided) => (
+
                             <Box
+                                variant="elevation"
                                 bgcolor={deleteColor ? '#F2F2F2' : 'rgb(244, 67, 54)'}
                                 color={deleteColor ? 'black' : 'white'}
                                 ref={provided.innerRef}
@@ -306,8 +308,10 @@ const Kanban = (props) => {
                                 {provided.placeholder}
                                 Delete
                             </Box>
+
                         )}
                     </Droppable>
+
                 </Box>
                 <Box sx={{
                     display: 'flex',

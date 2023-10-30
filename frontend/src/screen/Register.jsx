@@ -1,4 +1,4 @@
-import { Box, Button, TextField } from '@mui/material'
+import { Box, Button, TextField, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -6,6 +6,8 @@ import { useRegisterMutation } from '../slices/usersApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCredentials } from '../slices/authSlice';
 import { toast } from 'react-toastify';
+import { styled } from '@mui/material/styles';
+
 const Register = () => {
 
 
@@ -44,9 +46,17 @@ const Register = () => {
         setConfirmPasswordErrText('')
 
     }
-
+    const Div = styled('div')(({ theme }) => ({
+        ...theme.typography.button,
+        backgroundColor: theme.palette.background.paper,
+        padding: theme.spacing(1),
+    }));
     return (
         <>
+            <Typography variant="h1" component="h2">
+                Register
+            </Typography>
+
             <Box
                 component='form'
                 sx={{ mt: 1 }}
@@ -62,7 +72,6 @@ const Register = () => {
                     name='username'
                     value={usernameErrText}
                     disabled={isLoading}
-                    error={usernameErrText !== ''}
                     helperText={usernameErrText}
                     onChange={e => setUsernameErrText(e.target.value)}
 
@@ -76,7 +85,6 @@ const Register = () => {
                     name='password'
                     type='password'
                     disabled={isLoading} value={passwordErrText}
-                    error={passwordErrText !== ''}
                     helperText={passwordErrText} onChange={e => setPasswordErrText(e.target.value)}
                 />
                 <TextField
@@ -89,7 +97,7 @@ const Register = () => {
                     type='password'
                     disabled={isLoading}
                     value={confirmPasswordErrText}
-                    error={confirmPasswordErrText !== ''}
+                    error={confirmPasswordErrText !== passwordErrText}
                     helperText={confirmPasswordErrText} onChange={e => setConfirmPasswordErrText(e.target.value)}
                 />
                 <LoadingButton

@@ -5,8 +5,22 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { Box, Container } from '@mui/material';
 import assets from '../../assets/index.js';
 
+import { styled } from '@mui/material/styles';
+
+const Div = styled('div')(({ theme }) => ({
+    ...theme.typography.button,
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(1),
+}));
+
+
 const AuthLayout = () => {
     const [loading, setLoading] = useState(false);
+    const Div = styled('div')(({ theme }) => ({
+        ...theme.typography.button,
+        backgroundColor: theme.palette.background.paper,
+        padding: theme.spacing(1),
+    }));
 
     return (
         loading ? (
@@ -19,7 +33,7 @@ const AuthLayout = () => {
                     alignItems: 'center',
                     flexDirection: 'column'
                 }}>
-                    <img src={assets.images.logoDark} alt="Logo" style={{ width: '100px' }} />
+
                     <Outlet />
                 </Box>
             </Container>

@@ -1,11 +1,14 @@
-import { Box, ListItem, ListItemButton, Typography } from '@mui/material'
+import { Box, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, Link } from 'react-router-dom'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { setFavoriteList } from '../../slices/boardFavoriteSlice'
 import { useGetFavouritesMutation, useUpdateFavouritePositionMutation } from '../../slices/boardsApiSlice'
+import StarIcon from '@mui/icons-material/Star';
 import { toast } from 'react-toastify'
+import Home from '@mui/icons-material/Home'
+import ArrowRight from '@mui/icons-material/ArrowRight'
 const FavouriteList = () => {
     const dispatch = useDispatch()
     const list = useSelector((state) => state.favorite.value)
@@ -54,13 +57,60 @@ const FavouriteList = () => {
                 <Box sx={{
                     width: '100%',
                     display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    borderBottom: '1px solid',
+
+
                 }}>
-                    <Typography variant='body2' fontWeight='700'>
-                        Favourites
-                    </Typography>
+                    <ListItem component="div" disablePadding>
+                        <ListItemButton sx={{ height: 56 }}>
+                            <ListItemIcon>
+                                <Home color="error" />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary="Favourite "
+                                primaryTypographyProps={{
+                                    color: 'white',
+                                    fontWeight: 'medium',
+                                    variant: 'body2',
+                                }}
+                            />
+                        </ListItemButton>
+                        <Tooltip title="Starred">
+                            <IconButton
+                                size="large"
+                                sx={{
+                                    '& svg': {
+                                        color: 'rgba(255,255,255,0.8)',
+                                        transition: '0.2s',
+                                        transform: 'translateX(0) rotate(0)',
+                                    },
+                                    '&:hover, &:focus': {
+                                        bgcolor: 'unset',
+                                        '& svg:first-of-type': {
+                                            transform: 'translateX(-4px) rotate(-20deg)',
+                                        },
+                                        '& svg:last-of-type': {
+                                            right: 0,
+                                            opacity: 1,
+                                        },
+                                    },
+                                    '&:after': {
+                                        content: '""',
+                                        position: 'absolute',
+                                        height: '80%',
+                                        display: 'block',
+                                        left: 0,
+                                        width: '1px',
+                                        bgcolor: 'divider',
+                                    },
+                                }}
+                            >
+                                <StarIcon fontSize='small' style={{ color: 'yellow' }} />
+
+                                <ArrowRight sx={{ position: 'absolute', right: 4, opacity: 0 }} />
+                            </IconButton>
+                        </Tooltip>
+                    </ListItem>
+
                 </Box>
             </ListItem>
             <DragDropContext onDragEnd={onDragEnd}>

@@ -1,4 +1,4 @@
-import { Box, Button, TextField } from '@mui/material'
+import { Box, Button, TextField, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -6,6 +6,7 @@ import { logout, setCredentials } from '../slices/authSlice'
 import { toast } from 'react-toastify'
 import { useLoginMutation } from '../slices/usersApiSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { styled } from '@mui/material/styles';
 
 const Login = () => {
     const [usernameErrText, setUsernameErrText] = useState('');
@@ -40,9 +41,16 @@ const Login = () => {
     };
 
 
-
+    const Div = styled('div')(({ theme }) => ({
+        ...theme.typography.button,
+        backgroundColor: theme.palette.background.paper,
+        padding: theme.spacing(1),
+    }));
     return (
         <>
+            <Typography variant="h1" component="h2">
+                Login
+            </Typography>
             <Box
                 component='form'
                 sx={{ mt: 1 }}
@@ -57,7 +65,6 @@ const Login = () => {
                     label='Username'
                     name='username'
                     disabled={isLoading}
-                    error={usernameErrText !== ''}
                     helperText={usernameErrText}
                     value={usernameErrText}
                     onChange={e => setUsernameErrText(e.target.value)}
@@ -71,7 +78,6 @@ const Login = () => {
                     name='password'
                     type='password'
                     disabled={isLoading}
-                    error={passwordErrText !== ''}
                     helperText={passwordErrText}
                     value={passwordErrText}
                     onChange={e => setPasswordErrText(e.target.value)}

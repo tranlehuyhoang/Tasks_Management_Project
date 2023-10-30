@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, Typography } from '@mui/material';
+import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -10,6 +10,18 @@ import { setBoards } from '../../slices/boardSlice';
 import { useCreateBoardMutation, useGetAllMutation, useUpdatePositionMutation } from '../../slices/boardsApiSlice';
 import { logout } from '../../slices/authSlice';
 import FavouriteList from './FavouriteList';
+import StarIcon from '@mui/icons-material/Star';
+import Paper from '@mui/material/Paper';
+import Tooltip from '@mui/material/Tooltip';
+import ArrowRight from '@mui/icons-material/ArrowRight';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import Home from '@mui/icons-material/Home';
+import Settings from '@mui/icons-material/Settings';
+import People from '@mui/icons-material/People';
+import PermMedia from '@mui/icons-material/PermMedia';
+import Dns from '@mui/icons-material/Dns';
+import Public from '@mui/icons-material/Public';
+
 import { toast } from 'react-toastify'
 const SliderBar = () => {
 
@@ -143,17 +155,61 @@ const SliderBar = () => {
                     <Box sx={{
                         width: '100%',
                         display: 'flex', color: 'white',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        borderBottom: '1px solid',
-                    }}>
-                        <Typography variant='body2' fontWeight='700'>
-                            Private
-                        </Typography>
 
-                        <IconButton onClick={addBoard}>
-                            <AddBoxOutlinedIcon fontSize='small' style={{ color: 'white' }} />
-                        </IconButton>
+                    }}>
+                        <Divider />
+                        <ListItem component="div" disablePadding>
+                            <ListItemButton sx={{ height: 56 }}>
+                                <ListItemIcon>
+                                    <Home color="error" />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary="My Board "
+                                    primaryTypographyProps={{
+                                        color: 'white',
+                                        fontWeight: 'medium',
+                                        variant: 'body2',
+                                    }}
+                                />
+                            </ListItemButton>
+                            <Tooltip title="Add Board">
+                                <IconButton
+                                    size="large"
+                                    sx={{
+                                        '& svg': {
+                                            color: 'rgba(255,255,255,0.8)',
+                                            transition: '0.2s',
+                                            transform: 'translateX(0) rotate(0)',
+                                        },
+                                        '&:hover, &:focus': {
+                                            bgcolor: 'unset',
+                                            '& svg:first-of-type': {
+                                                transform: 'translateX(-4px) rotate(-20deg)',
+                                            },
+                                            '& svg:last-of-type': {
+                                                right: 0,
+                                                opacity: 1,
+                                            },
+                                        },
+                                        '&:after': {
+                                            content: '""',
+                                            position: 'absolute',
+                                            height: '80%',
+                                            display: 'block',
+                                            left: 0,
+                                            width: '1px',
+                                            bgcolor: 'divider',
+                                        },
+                                    }}
+                                >
+                                    <AddBoxOutlinedIcon onClick={addBoard} fontSize='small' style={{ color: 'white' }} />
+
+                                    <ArrowRight sx={{ position: 'absolute', right: 4, opacity: 0 }} />
+                                </IconButton>
+                            </Tooltip>
+                        </ListItem>
+
+
                     </Box>
 
                 </ListItem>
