@@ -1,5 +1,5 @@
 import { apiSlice } from './apiSlice.js';
-const TASKS_URL = 'https://kanban-servers.onrender.com/api/tasks';
+const TASKS_URL = '/api/tasks';
 
 export const tasksApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({

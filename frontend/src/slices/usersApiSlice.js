@@ -1,5 +1,5 @@
 import { apiSlice } from './apiSlice.js';
-const USERS_URL = 'https://kanban-servers.onrender.com/api/users';
+const USERS_URL = '/api/users';
 
 export const userApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -32,7 +32,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         }),
         getalls: builder.mutation({
             query: (data) => ({
-                url: `https://kanban-servers.onrender.com/api/boards`,
+                url: `/api/boards`,
                 method: 'GET',
                 body: data,
             }),
