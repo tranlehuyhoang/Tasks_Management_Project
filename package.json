@@ -10,6 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "nodemon ./backend/server.js",
+    "client": "npm run dev --prefix frontend ",
     "start": "node server.js"
   },
   "author": "",

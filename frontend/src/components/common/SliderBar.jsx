@@ -26,6 +26,7 @@ const SliderBar = () => {
     const [updatePosition] = useUpdatePositionMutation();
     const [createBoard] = useCreateBoardMutation();
     const { userInfo } = useSelector((state) => state.auth);
+    console.log(userInfo.token)
 
 
 
@@ -79,7 +80,7 @@ const SliderBar = () => {
 
         try {
             // await useUpdatePositionMutation({ boards: newList })
-            const res = await updatePosition({ boards: newList }).unwrap();
+            const res = await updatePosition({ boards: newList, token: userInfo.token }).unwrap();
         } catch (err) {
             toast.error(err?.data?.message || err.error);
         }
