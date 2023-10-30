@@ -13,6 +13,8 @@ const authSlice = createSlice({
         setCredentials: (state, action) => {
             state.userInfo = action.payload;
             localStorage.setItem('userInfo', JSON.stringify(action.payload));
+            // console.log(action.payload)
+            document.cookie = `jwt1=${action.payload.token};`
         },
         logout: (state, action) => {
             state.userInfo = null;

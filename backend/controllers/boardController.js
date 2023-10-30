@@ -8,6 +8,8 @@ import User from '../models/userModel.js';
 
 
 const createBoard = asyncHandler(async (req, res) => {
+    console.log('createBoard')
+
     try {
         const boardsCount = await Board.find().count()
         const board = await Board.create({
@@ -22,6 +24,7 @@ const createBoard = asyncHandler(async (req, res) => {
 
 })
 const getAll = asyncHandler(async (req, res) => {
+    console.log('getAll')
     try {
         const boards = await Board.find({ user: req.user._id }).sort('-position')
         res.status(200).json(
@@ -33,6 +36,8 @@ const getAll = asyncHandler(async (req, res) => {
 
 })
 const getOne = asyncHandler(async (req, res) => {
+    console.log('getOne')
+
     const { boardId } = req.params
     try {
         const board = await Board.findOne({ user: req.user._id, _id: boardId })
@@ -50,6 +55,7 @@ const getOne = asyncHandler(async (req, res) => {
 
 })
 const updatePosition = asyncHandler(async (req, res) => {
+    console.log('updatePosition')
 
     const { boards } = req.body
     try {
@@ -67,6 +73,8 @@ const updatePosition = asyncHandler(async (req, res) => {
 
 })
 const update = asyncHandler(async (req, res) => {
+    console.log('update')
+
     const { boardId } = req.params
     const { title, description, favourite } = req.body
 
@@ -106,6 +114,8 @@ const update = asyncHandler(async (req, res) => {
 
 })
 const getFavourites = asyncHandler(async (req, res) => {
+    console.log('getFavourites')
+
     try {
         const favourites = await Board.find({
             user: req.user._id,
@@ -118,6 +128,8 @@ const getFavourites = asyncHandler(async (req, res) => {
 
 })
 const updateFavouritePosition = asyncHandler(async (req, res) => {
+    console.log('updateFavouritePosition')
+
     const { boards } = req.body
     try {
         for (const key in boards.reverse()) {
@@ -134,6 +146,7 @@ const updateFavouritePosition = asyncHandler(async (req, res) => {
 
 })
 const deleteBoard = asyncHandler(async (req, res) => {
+    console.log('deleteBoard')
 
     const { boardId } = req.params
     try {

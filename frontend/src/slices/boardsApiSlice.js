@@ -25,10 +25,10 @@ export const boardApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         getFavourites: builder.mutation({
-            query: (data) => ({
+            query: () => ({
                 url: `${BOARDS_URL}/favourites`,
                 method: 'GET',
-                body: data,
+
             }),
         }),
         updateFavouritePosition: builder.mutation({

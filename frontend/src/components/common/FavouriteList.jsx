@@ -16,6 +16,7 @@ const FavouriteList = () => {
     const { boardId } = useParams()
     const [getFavourites] = useGetFavouritesMutation();
     const [updateFavouritePosition] = useUpdateFavouritePositionMutation();
+    const { userInfo } = useSelector((state) => state.auth);
 
     useEffect(() => {
         const getBoards = async () => {

@@ -5,18 +5,16 @@ import User from '../models/userModel.js';
 
 const protect = asyncHandler(async (req, res, next) => {
     let token;
-
-    token = req.cookies.jwt;
+    console.log(req.cookies)
+    token = req.cookies.jwt1;
 
     if (token) {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            console.log(decoded)
             req.user = await User.findById(decoded.userId).select('-password');
 
             next();
         } catch (error) {
-            console.error(error);
             res.status(401);
             throw new Error('Not authorized, token failed');
         }

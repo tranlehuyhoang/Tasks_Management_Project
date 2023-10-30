@@ -31,10 +31,10 @@ export const userApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         getalls: builder.mutation({
-            query: (data) => ({
+            query: () => ({
                 url: `/api/boards`,
                 method: 'GET',
-                body: data,
+
             }),
         }),
     }),
