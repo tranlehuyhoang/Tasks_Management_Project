@@ -49,7 +49,7 @@ const TaskModal = ({ task, open, setOpen, setData, dataBoard, onUpdateTask, onUp
         timer = setTimeout(async () => {
             try {
                 const res = await updateTask({ taskId: task.id, content: data }).unwrap();
-                setTask(res);
+                onUpdateTask(res)
             } catch (err) {
                 toast.error(err?.data?.message || err.error);
             }
@@ -57,7 +57,6 @@ const TaskModal = ({ task, open, setOpen, setData, dataBoard, onUpdateTask, onUp
         // task.content = data
 
         // setData(newData); // Set the updated dataBoard state
-        onUpdateTask(task)
     };
     const updateTitle = async (event) => {
 
@@ -69,7 +68,8 @@ const TaskModal = ({ task, open, setOpen, setData, dataBoard, onUpdateTask, onUp
             try {
                 // console.log(task)
                 const res = await updateTask({ taskId: task.id, title: event.target.value }).unwrap();
-                await onUpdateTaskTitle(event.target.value, task.section.id, task.id, task.position)
+                // await onUpdateTaskTitle(event.target.value, task.section.id, task.id, task.position)
+                await onUpdateTaskTitle(res)
             } catch (err) {
                 toast.error(err?.data?.message || err.error);
             }

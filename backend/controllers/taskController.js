@@ -25,11 +25,18 @@ const createTask = async (req, res) => {
 const updateTask = async (req, res) => {
     const { taskId } = req.params
     try {
+
         const task = await Task.findByIdAndUpdate(
             taskId,
             { $set: req.body }
         )
-        res.status(200).json(task)
+        try {
+            // Lấy task dựa trên ID
+            const gettask = await Task.findById(taskId);
+            res.status(200).json(gettask);
+        } catch (err) {
+            throw new Error(err);
+        }
     } catch (err) {
         throw new Error(err)
     }

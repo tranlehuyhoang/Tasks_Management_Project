@@ -196,47 +196,19 @@ const Kanban = (props) => {
             toast.error(err?.data?.message || err.error);
         }
     };
-    const onUpdateTask = async (tasksss) => {
-        console.log(data)
-        // setData(prevData => {
-        //     const newData = [...prevData];
-        //     const sectionIndex = newData.findIndex(e => e.id === tasksss.section.id)
-        //     if (sectionIndex !== -1) {
-        //         newData[sectionIndex] = {
-        //             ...newData[sectionIndex],
-        //             tasks: [tasksss, ...newData[sectionIndex].tasks]
-        //         };
-        //     }
-        //     return newData;
-        // });
-
-    }
-    const onUpdateTaskTitle = async (title, sectionId, taskId, taskPositon) => {
-        // console.log(title, sectionId, taskId, taskPositon)
-        // console.log('mảng sections cũ: ', data)
-        // const sectionIndex = data.findIndex(e => e.id === sectionId)
-        // console.log('mảng sections cần update :', data[sectionIndex])
-        // console.log('task trong section cần update :', data[sectionIndex].tasks[taskPositon])
-        // console.log('title cần update :', title)
-        // console.log(data[sectionIndex].tasks)
-        // const indexTask = data[sectionIndex].tasks.findIndex(task => task.id === taskId);
-        // console.log(data[sectionIndex].tasks[indexTask])
-
-        setData(prevData => {
-            const newData = [...prevData];
-            const sectionIndex = newData.findIndex(e => e.id === sectionId);
+    const onUpdateTask = async (task) => {
+        setData((prevData) => {
+            const newData = JSON.parse(JSON.stringify(prevData)); // Tạo bản sao sâu của prevData
+            const sectionIndex = newData.findIndex((e) => e.id === task.section);
             if (sectionIndex !== -1) {
-                const taskIndex = newData[sectionIndex].tasks.findIndex(task => task.id === taskId);
+                const taskIndex = newData[sectionIndex].tasks.findIndex(
+                    (t) => t.id === task.id
+                );
                 if (taskIndex !== -1) {
-                    const updatedTask = {
-                        ...newData[sectionIndex].tasks[taskIndex],
-                        title: title
-                    };
-
                     newData[sectionIndex].tasks = [
                         ...newData[sectionIndex].tasks.slice(0, taskIndex),
-                        updatedTask,
-                        ...newData[sectionIndex].tasks.slice(taskIndex + 1)
+                        task,
+                        ...newData[sectionIndex].tasks.slice(taskIndex + 1),
                     ];
                 }
             }
@@ -244,6 +216,26 @@ const Kanban = (props) => {
         });
 
     }
+    const onUpdateTaskTitle = async (task) => {
+        console.log(task);
+        setData((prevData) => {
+            const newData = JSON.parse(JSON.stringify(prevData)); // Tạo bản sao sâu của prevData
+            const sectionIndex = newData.findIndex((e) => e.id === task.section);
+            if (sectionIndex !== -1) {
+                const taskIndex = newData[sectionIndex].tasks.findIndex(
+                    (t) => t.id === task.id
+                );
+                if (taskIndex !== -1) {
+                    newData[sectionIndex].tasks = [
+                        ...newData[sectionIndex].tasks.slice(0, taskIndex),
+                        task,
+                        ...newData[sectionIndex].tasks.slice(taskIndex + 1),
+                    ];
+                }
+            }
+            return newData;
+        });
+    };
     return (
         <>
             <Box sx={{
