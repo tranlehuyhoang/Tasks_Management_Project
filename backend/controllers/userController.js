@@ -25,7 +25,8 @@ const registerUser = asyncHandler(async (req, res) => {
         console.log(user, token)
         res.status(201).json({
             _id: user._id,
-            name: user.username
+            name: user.username,
+            token: token
         });
 
     } else {
@@ -44,7 +45,8 @@ const authUser = asyncHandler(async (req, res) => {
 
         res.json({
             _id: user._id,
-            name: user.username
+            name: user.username,
+            token: token
         });
     } else {
         res.status(401);
