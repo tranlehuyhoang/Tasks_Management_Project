@@ -4,7 +4,6 @@ import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
 
 const registerUser = asyncHandler(async (req, res) => {
-    console.log('register')
     const { username, password } = req.body;
 
     const userExists = await User.findOne({ username });
@@ -22,7 +21,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
     if (user) {
         const token = generateToken(res, user._id);
-        console.log(user, token)
         res.status(201).json({
             _id: user._id,
             name: user.username,
