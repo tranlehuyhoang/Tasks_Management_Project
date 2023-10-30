@@ -1,6 +1,6 @@
 import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react';
 
-const baseQuery = fetchBaseQuery({ baseUrl: '' });
+const baseQuery = fetchBaseQuery({ baseUrl: 'https://kanban-servers.onrender.com/' });
 
 export const apiSlice = createApi({
     baseQuery,
