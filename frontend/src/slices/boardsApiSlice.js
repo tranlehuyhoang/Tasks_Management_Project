@@ -1,6 +1,6 @@
 import { useParams } from 'react-router';
 import { apiSlice } from './apiSlice.js';
-const BOARDS_URL = '/api/boards';
+const BOARDS_URL = 'https://kanban-servers.onrender.com/api/boards';
 
 export const boardApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
