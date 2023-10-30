@@ -10,17 +10,9 @@ import { setBoards } from '../../slices/boardSlice';
 import { useCreateBoardMutation, useGetAllMutation, useUpdatePositionMutation } from '../../slices/boardsApiSlice';
 import { logout } from '../../slices/authSlice';
 import FavouriteList from './FavouriteList';
-import StarIcon from '@mui/icons-material/Star';
-import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import ArrowRight from '@mui/icons-material/ArrowRight';
-import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import Home from '@mui/icons-material/Home';
-import Settings from '@mui/icons-material/Settings';
-import People from '@mui/icons-material/People';
-import PermMedia from '@mui/icons-material/PermMedia';
-import Dns from '@mui/icons-material/Dns';
-import Public from '@mui/icons-material/Public';
 
 import { toast } from 'react-toastify'
 const SliderBar = () => {

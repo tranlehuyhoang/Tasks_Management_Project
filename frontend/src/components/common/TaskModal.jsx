@@ -1,6 +1,5 @@
 import { Box, Button, IconButton, Modal, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import CloseIcon from '@mui/icons-material/Close';
 import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -12,8 +11,6 @@ let timer
 const timeout = 500
 const TaskModal = ({ task, open, setOpen, setData, dataBoard, onUpdateTask, onUpdateTaskTitle }) => {
     const [title, setTitle] = useState('')
-    const [taskData, setTask] = useState()
-    const [updateicon, setupdateicon] = useState(true)
     const [content, setContent] = useState('')
 
     const [updateTask, { isLoading }] = useUpdateTaskMutation();
@@ -25,22 +22,6 @@ const TaskModal = ({ task, open, setOpen, setData, dataBoard, onUpdateTask, onUp
 
         }
     }, [task, open])
-
-    // const updateTitle = async (e) => {
-    //     clearTimeout(timer)
-    //     const newTitle = e.target.value
-    //     timer = setTimeout(async () => {
-    //       try {
-    //         await taskApi.update(boardId, task.id, { title: newTitle })
-    //       } catch (err) {
-    //         alert(err)
-    //       }
-    //     }, timeout)
-
-    //     task.title = newTitle
-    //     setTitle(newTitle)
-    //     props.onUpdate(task)
-    //   }
 
     const updateContent = async (event, editor) => {
         const data = editor.getData();

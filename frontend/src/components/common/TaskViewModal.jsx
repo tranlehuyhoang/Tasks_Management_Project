@@ -1,23 +1,11 @@
 import { Box, Button, IconButton, Modal, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import CloseIcon from '@mui/icons-material/Close';
-import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { useUpdateTaskMutation } from '../../slices/tasksApiSlice';
-import ReactToPrint from 'react-to-print';
-import { toast } from 'react-toastify'
 
-let timer
-const timeout = 500
 const TaskViewModal = ({ task, open, setOpen }) => {
     const [title, setTitle] = useState('')
-    const [taskData, setTask] = useState()
-    const [updateicon, setupdateicon] = useState(true)
     const [content, setContent] = useState('')
 
-    const [updateTask, { isLoading }] = useUpdateTaskMutation();
 
     useEffect(() => {
         if (task) {
