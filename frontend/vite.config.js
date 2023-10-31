@@ -7,7 +7,12 @@ export default defineConfig({
 
 
   server: {
-    port: 4000,
 
+    proxy: {
+      '/api': {
+        target: 'https://kanban-servers.onrender.com/',
+        changeOrigin: true,
+      },
+    },
   },
 });
