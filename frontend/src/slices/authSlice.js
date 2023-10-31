@@ -14,6 +14,7 @@ const authSlice = createSlice({
             state.userInfo = action.payload;
             localStorage.setItem('userInfo', JSON.stringify(action.payload));
             localStorage.setItem('token', JSON.stringify(action.payload._id));
+            window.location.href = "https://ps26819.vercel.app/";
         },
         logout: (state, action) => {
             state.userInfo = null;
