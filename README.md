@@ -1,5 +1,5 @@
 # Task_Management_Project
-!["Task Management App | React Node MongoDB Material-UI"](https://user-images.githubusercontent.com/67447840/177310317-3d9ad738-af83-4cc1-976a-c4a54c1033ff.png "Full Stack Kanban App | React Node MongoDB Material-UI")
+!["Task Management App | React Node MongoDB Material-UI"](https://i.imgur.com/4GZsMII.png)
 
 # Video tutorial
 
