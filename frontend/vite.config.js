@@ -6,13 +6,5 @@ export default defineConfig({
   plugins: [react()],
 
 
-  server: {
 
-    proxy: {
-      '/api': {
-        target: 'https://kanban-servers.onrender.com/',
-        changeOrigin: true,
-      },
-    },
-  },
 });
