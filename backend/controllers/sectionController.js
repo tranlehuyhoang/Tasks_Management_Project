@@ -8,6 +8,8 @@ import User from '../models/userModel.js';
 
 const create = asyncHandler(async (req, res) => {
     const { boardId } = req.params
+    let token;
+    token = req.query.token.replace(/"/g, '');
     try {
         const section = await Section.create({ board: boardId })
         section._doc.tasks = []
@@ -19,6 +21,8 @@ const create = asyncHandler(async (req, res) => {
 })
 const update = asyncHandler(async (req, res) => {
     const { sectionId } = req.params
+    let token;
+    token = req.query.token.replace(/"/g, '');
     try {
         const section = await Section.findByIdAndUpdate(
             sectionId,
@@ -33,6 +37,8 @@ const update = asyncHandler(async (req, res) => {
 });
 const deleteSection = asyncHandler(async (req, res) => {
     const { sectionId } = req.params
+    let token;
+    token = req.query.token.replace(/"/g, '');
     try {
         await Task.deleteMany({ section: sectionId })
         await Section.deleteOne({ _id: sectionId })

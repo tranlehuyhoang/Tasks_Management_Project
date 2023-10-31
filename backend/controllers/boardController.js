@@ -9,11 +9,13 @@ import User from '../models/userModel.js';
 
 const createBoard = asyncHandler(async (req, res) => {
     console.log('createBoard')
-
+    let token;
+    token = req.query.token.replace(/"/g, '');
+    console.log(token)
     try {
         const boardsCount = await Board.find().count()
         const board = await Board.create({
-            user: req.user._id,
+            user: token,
             position: boardsCount > 0 ? boardsCount : 0
         })
         res.status(201).json(board)
@@ -25,8 +27,12 @@ const createBoard = asyncHandler(async (req, res) => {
 })
 const getAll = asyncHandler(async (req, res) => {
     console.log('getAll')
+    let token;
+    token = req.query.token.replace(/"/g, '');
+    console.log(token)
+
     try {
-        const boards = await Board.find({ user: req.user._id }).sort('-position')
+        const boards = await Board.find({ user: token }).sort('-position')
         res.status(200).json(
             boards
         )
@@ -37,10 +43,12 @@ const getAll = asyncHandler(async (req, res) => {
 })
 const getOne = asyncHandler(async (req, res) => {
     console.log('getOne')
-
+    let token;
+    token = req.query.token.replace(/"/g, '');
+    console.log(token)
     const { boardId } = req.params
     try {
-        const board = await Board.findOne({ user: req.user._id, _id: boardId })
+        const board = await Board.findOne({ user: token, _id: boardId })
         if (!board) return res.status(404).json('Board not found')
         const sections = await Section.find({ board: boardId })
         for (const section of sections) {
@@ -56,7 +64,9 @@ const getOne = asyncHandler(async (req, res) => {
 })
 const updatePosition = asyncHandler(async (req, res) => {
     console.log('updatePosition')
-
+    let token;
+    token = req.query.token.replace(/"/g, '');
+    console.log(token)
     const { boards } = req.body
     try {
         for (const key in boards.reverse()) {
@@ -74,7 +84,9 @@ const updatePosition = asyncHandler(async (req, res) => {
 })
 const update = asyncHandler(async (req, res) => {
     console.log('update')
-
+    let token;
+    token = req.query.token.replace(/"/g, '');
+    console.log(token)
     const { boardId } = req.params
     const { title, description, favourite } = req.body
 
@@ -115,10 +127,12 @@ const update = asyncHandler(async (req, res) => {
 })
 const getFavourites = asyncHandler(async (req, res) => {
     console.log('getFavourites')
-
+    let token;
+    token = req.query.token.replace(/"/g, '');
+    console.log(token)
     try {
         const favourites = await Board.find({
-            user: req.user._id,
+            user: token,
             favourite: true
         }).sort('-favouritePosition')
         res.status(200).json(favourites)
@@ -129,7 +143,9 @@ const getFavourites = asyncHandler(async (req, res) => {
 })
 const updateFavouritePosition = asyncHandler(async (req, res) => {
     console.log('updateFavouritePosition')
-
+    let token;
+    token = req.query.token.replace(/"/g, '');
+    console.log(token)
     const { boards } = req.body
     try {
         for (const key in boards.reverse()) {
@@ -147,7 +163,9 @@ const updateFavouritePosition = asyncHandler(async (req, res) => {
 })
 const deleteBoard = asyncHandler(async (req, res) => {
     console.log('deleteBoard')
-
+    let token;
+    token = req.query.token.replace(/"/g, '');
+    console.log(token)
     const { boardId } = req.params
     try {
         const sections = await Section.find({ board: boardId })

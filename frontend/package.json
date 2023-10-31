@@ -23,7 +23,6 @@
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.5.1",
     "ckeditor": "^4.12.1",
-    "dns": "^0.2.2",
     "emoji-mart": "^5.5.2",
     "js-cookie": "^3.0.5",
     "moment": "^2.29.4",

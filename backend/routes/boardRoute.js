@@ -10,16 +10,15 @@ import {
     , updateFavouritePosition
     , deleteBoard
 } from '../controllers/boardController.js';
-import { protect } from '../middleware/authMiddleware.js';
 const router = express.Router();
-router.post('/', protect, createBoard);
-router.get('/', protect, getAll);
-router.put('/', protect, updatePosition);
-router.get('/favourites', protect, getFavourites);
-router.put('/favourites', protect, updateFavouritePosition);
-router.get('/:boardId', protect, getOne);
-router.put('/:boardId', protect, update);
-router.delete('/:boardId', protect, deleteBoard);
+router.post('/', createBoard);
+router.get('/', getAll);
+router.put('/', updatePosition);
+router.get('/favourites', getFavourites);
+router.put('/favourites', updateFavouritePosition);
+router.get('/:boardId', getOne);
+router.put('/:boardId', update);
+router.delete('/:boardId', deleteBoard);
 
 
 

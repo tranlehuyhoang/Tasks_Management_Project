@@ -18,14 +18,21 @@ dotenv.config();
 connectDB();
 const port = process.env.PORT || 300
 const app = express();
-const corsOptions = {
-    origin: function (origin, callback) {
-        return callback(null, true);
-    },
-    optionsSuccessStatus: 200,
-    credentials: true,
-}
-app.use(cors(corsOptions));
+
+app.use(
+    cors({
+        origin: [
+            "http://localhost:4000",
+            "https://ps26819.vercel.app"
+        ],
+        allowedHeaders: [
+            "Access-Control-Allow-Origin",
+            "Content-Type",
+            "Authorization",
+        ],
+        credentials: true,
+    })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
